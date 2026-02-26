@@ -41,6 +41,7 @@ export const TradingTransactionExchange = ({
 
     return (
         <TradingTransactionContainer
+            data-testid={`@trading/transactions/list/swap-transaction/${trade.key}`}
             TradeDetail={
                 <>
                     <TradingTransactionAmounts trade={trade} />
