@@ -11,6 +11,7 @@ export interface AppSettingsState {
     isDeviceAuthenticityCheckEnabled: boolean;
     isFirmwareRevisionCheckEnabled: boolean;
     isFirmwareHashCheckEnabled: boolean;
+    areDeviceMetaChecksEnabled: boolean;
     areTestnetsEnabled: boolean;
     shouldShowAutoEjectAlert: boolean;
     hasAutoEjectAlertBeenDisplayed: boolean;
@@ -28,6 +29,7 @@ export const appSettingsInitialState: AppSettingsState = {
     isFirmwareRevisionCheckEnabled:
         process.env.EXPO_PUBLIC_IS_FIRMWARE_REVISION_CHECK_ENABLED !== 'false',
     isFirmwareHashCheckEnabled: process.env.EXPO_PUBLIC_IS_FIRMWARE_HASH_CHECK_ENABLED !== 'false',
+    areDeviceMetaChecksEnabled: process.env.EXPO_PUBLIC_ARE_DEVICE_META_CHECKS_ENABLED !== 'false',
     areTestnetsEnabled: isDetoxTestBuild(),
     shouldShowAutoEjectAlert: false,
     hasAutoEjectAlertBeenDisplayed: false,
@@ -38,6 +40,7 @@ export const appSettingsPersistWhitelist: Array<keyof AppSettingsState> = [
     'isDeviceAuthenticityCheckEnabled',
     'isFirmwareRevisionCheckEnabled',
     'isFirmwareHashCheckEnabled',
+    'areDeviceMetaChecksEnabled',
     'areTestnetsEnabled',
     'hasAutoEjectAlertBeenDisplayed',
     'experimentalFeatures',
@@ -71,6 +74,7 @@ export const appSettingsSlice = createSlice({
         setCheckFirmwareAuthenticityEnabled: (state, { payload }: PayloadAction<boolean>) => {
             state.isFirmwareRevisionCheckEnabled = payload;
             state.isFirmwareHashCheckEnabled = payload;
+            state.areDeviceMetaChecksEnabled = payload;
         },
         setDeviceAuthenticityCheckEnabled: (state, { payload }: PayloadAction<boolean>) => {
             state.isDeviceAuthenticityCheckEnabled = payload;
@@ -106,13 +110,21 @@ export const selectAreTestnetsEnabled = (state: SettingsSliceRootState) =>
 export const selectHasAutoEjectAlertBeenDisplayed = (state: SettingsSliceRootState) =>
     state.appSettings.hasAutoEjectAlertBeenDisplayed;
 
+export const selectIsFirmwareRevisionCheckEnabled = (state: SettingsSliceRootState) =>
+    state.appSettings.isFirmwareRevisionCheckEnabled;
+export const selectIsFirmwareHashCheckEnabled = (state: SettingsSliceRootState) =>
+    state.appSettings.isFirmwareHashCheckEnabled;
+export const selectAreDeviceMetaChecksEnabled = (state: SettingsSliceRootState) =>
+    state.appSettings.areDeviceMetaChecksEnabled;
+
 /**
- * Determine if either FW revision or FW hash check is disabled
- * (both are controlled by the same setting, see setCheckFirmwareAuthenticityEnabled reducer)
+ * Determine if any of FW revision, FW hash, or meta checks are disabled
+ * (all are controlled by the same setting, see setCheckFirmwareAuthenticityEnabled reducer)
  */
 export const selectIsFirmwareAuthenticityCheckEnabled = (state: SettingsSliceRootState) =>
-    state.appSettings.isFirmwareRevisionCheckEnabled &&
-    state.appSettings.isFirmwareHashCheckEnabled;
+    selectIsFirmwareRevisionCheckEnabled(state) &&
+    selectIsFirmwareHashCheckEnabled(state) &&
+    selectAreDeviceMetaChecksEnabled(state);
 
 export const {
     setIsOnboardingFinished,

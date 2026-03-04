@@ -2335,6 +2335,8 @@ export const messages = {
             subtitle: {
                 fwRevision: 'Your device firmware revision check failed.',
                 deviceAuthenticity: 'Your device authentication check failed.',
+                deviceId: 'The security check (ID validity check) failed.',
+                invariability: 'Your Trezor’s model or color appears to have been manipulated.',
                 entropy: 'Security check (entropy verification) failed.',
             },
             steps: {
