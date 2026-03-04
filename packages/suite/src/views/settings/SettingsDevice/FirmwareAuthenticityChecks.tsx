@@ -6,6 +6,7 @@ import { toggleFirmwareAuthenticityChecks } from 'src/actions/suite/suiteActions
 import { ActionButton, ActionColumn, SectionItem, TextColumn } from 'src/components/suite';
 import { useDispatch, useSelector } from 'src/hooks/suite';
 import {
+    selectAreDeviceMetaChecksEnabled,
     selectIsFirmwareHashCheckEnabled,
     selectIsFirmwareRevisionCheckEnabled,
 } from 'src/selectors/suite/suiteSelectors';
@@ -14,11 +15,12 @@ export const FirmwareAuthenticityChecks = () => {
     const dispatch = useDispatch();
     const isFirmwareHashCheckEnabled = useSelector(selectIsFirmwareHashCheckEnabled);
     const isFirmwareRevisionCheckEnabled = useSelector(selectIsFirmwareRevisionCheckEnabled);
+    const areDeviceMetaChecksEnabled = useSelector(selectAreDeviceMetaChecksEnabled);
 
     // Checks can gradually be turned off in debug settings.
-    // In case either one of the check is turned off, the toggle shall be considered off, inviting the user to turn back it on.
+    // In case any one of the checks is turned off, the toggle shall be considered off, inviting the user to turn back it on.
     const areAllFirmwareChecksEnabled =
-        isFirmwareHashCheckEnabled && isFirmwareRevisionCheckEnabled;
+        isFirmwareHashCheckEnabled && isFirmwareRevisionCheckEnabled && areDeviceMetaChecksEnabled;
 
     const handleClick = () =>
         dispatch(
