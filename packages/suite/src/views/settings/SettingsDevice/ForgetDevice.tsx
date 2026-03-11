@@ -134,7 +134,14 @@ export const ForgetDeviceModal = ({ onCancel }: ModalProps) => {
                 // forget fail with "Peripheral not found". The user will handle
                 // OS removal manually via UnpairBluetoothDeviceFromOsModal.
                 if (bluetoothId) {
-                    await dispatch(unpairCurrentBondThunk({ bluetoothId, skipDisconnect: true }));
+                    const success = await dispatch(
+                        unpairCurrentBondThunk({ bluetoothId, skipDisconnect: true }),
+                    ).unwrap();
+
+                    // Only proceed to OS removal if unpair was successful
+                    if (!success) {
+                        return;
+                    }
                 }
 
                 setStep('remove-from-os');
