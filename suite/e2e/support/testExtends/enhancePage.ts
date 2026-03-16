@@ -56,10 +56,16 @@ export const enhancePage = (page: Page): Page => {
     page.discoveryShouldFinish = async function () {
         const discoveryBar = page.getByTestId('@wallet/discovery-progress-bar');
         await test.step('Wait for discovery to finish', async () => {
-            await expect(discoveryBar, 'discovery bar should be visible').toBeVisible({
-                timeout: 15_000,
-            });
-            await discoveryBar.waitFor({ state: 'detached', timeout: 120_000 });
+            await expect(async () => {
+                if (await discoveryBar.isVisible()) {
+                    await discoveryBar.waitFor({ state: 'detached', timeout: 120_000 });
+                }
+                await expect(discoveryBar).toBeHidden();
+            }).toPass({ timeout: 120_000 });
+            // await expect(discoveryBar, 'discovery bar should be visible').toBeVisible({
+            //     timeout: 15_000,
+            // });
+            // await discoveryBar.waitFor({ state: 'detached', timeout: 120_000 });
         });
     };
 

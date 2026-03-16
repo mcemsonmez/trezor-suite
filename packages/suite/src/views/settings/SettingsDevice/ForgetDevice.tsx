@@ -37,7 +37,7 @@ const ConfirmationContent = ({
     isBluetoothDevice: boolean;
     isBluetoothConnectedDevice: boolean;
 }) => (
-    <Card paddingType="normal">
+    <Card paddingType="normal" data-testid="@settings/device/forget/confirm-content">
         <List gap={24}>
             <List.Item bulletComponent={<Icon name="linkBreak" priority="secondary" size={20} />}>
                 <Paragraph intent="neutral" priority="secondary">
@@ -177,10 +177,18 @@ export const ForgetDeviceModal = ({ onCancel }: ModalProps) => {
                 width={680}
                 bottomContent={
                     <>
-                        <Modal.Button onClick={handleConfirmClick}>
+                        <Modal.Button
+                            data-testid="@settings/device/forget-button-confirm"
+                            onClick={handleConfirmClick}
+                        >
                             <Translation id="TR_FORGET_DEVICE_MODAL_CONFIRM" />
                         </Modal.Button>
-                        <Modal.Button intent="neutral" priority="secondary" onClick={onCancel}>
+                        <Modal.Button
+                            data-testid="@settings/device/forget-button-cancel"
+                            intent="neutral"
+                            priority="secondary"
+                            onClick={onCancel}
+                        >
                             <Translation id="TR_CANCEL" />
                         </Modal.Button>
                     </>
@@ -246,7 +254,12 @@ export const ForgetDeviceModal = ({ onCancel }: ModalProps) => {
                             />
                         }
                         actions={
-                            <Button intent="brand" onClick={handleOsRemovalConfirm} size="large">
+                            <Button
+                                intent="brand"
+                                onClick={handleOsRemovalConfirm}
+                                size="large"
+                                data-testid="@settings/device/ive-removed-it-button"
+                            >
                                 <Translation id="TR_FORGET_DEVICE_MODAL_IVE_REMOVED_IT" />
                             </Button>
                         }
@@ -269,6 +282,7 @@ export const ForgetDeviceModal = ({ onCancel }: ModalProps) => {
                                 intent="brand"
                                 onClick={handleTrezorRemovalConfirm}
                                 size="large"
+                                data-testid="@settings/device/ive-removed-it-button-trezor"
                             >
                                 <Translation id="TR_FORGET_DEVICE_MODAL_IVE_REMOVED_IT" />
                             </Button>
@@ -300,7 +314,7 @@ export const ForgetDevice = () => {
     return (
         <>
             {isModalOpen && <ForgetDeviceModal onCancel={handleModalCancel} />}
-            <SectionItem data-test="@settings/device/forget">
+            <SectionItem data-testid="@settings/device/forget">
                 <TextColumn
                     title={<Translation id="TR_FORGET_DEVICE_HEADING" />}
                     description={<Translation id="TR_FORGET_DEVICE_DESCRIPTION" />}
@@ -310,6 +324,7 @@ export const ForgetDevice = () => {
                         onClick={handleClick}
                         intent="warning"
                         isDisabled={hasRunningDiscovery}
+                        data-testid="@settings/device/forget-button"
                     >
                         <Translation id="TR_FORGET" />
                     </ActionButton>

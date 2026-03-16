@@ -1,5 +1,8 @@
-import { Locator, Page, expect } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
+import { TranslationKey } from '@suite/intl';
+
+import { expect } from '../../../support/fixtures';
 import { step } from '../../common';
 
 export class DeviceTab {
@@ -14,6 +17,16 @@ export class DeviceTab {
     readonly firmwareConfirmSeedButton: Locator;
     readonly firmwareReconnectDevice: Locator;
     readonly autoconnectSwitch: Locator;
+    readonly deviceForgetButton: Locator;
+    readonly deviceForgetConfirmContent: Locator;
+    readonly deviceForgetConfirmButton: Locator;
+    readonly deviceForgetCancelButton: Locator;
+    readonly deviceForgetIveRemovedItButton: Locator;
+    readonly deviceForgetIveRemovedItTrezorButton: Locator;
+    readonly deviceForgetModal: Locator;
+    readonly deviceForgetHeader: Locator;
+    readonly toastDeviceForgotten: Locator;
+    readonly toastDeviceWillBeForgotten: Locator;
 
     constructor(private readonly page: Page) {
         this.createMultiShareBackupButton = page.getByTestId(
@@ -35,6 +48,22 @@ export class DeviceTab {
         this.firmwareConfirmSeedButton = page.getByTestId('@firmware/confirm-seed-button');
         this.firmwareReconnectDevice = page.getByTestId('@firmware/reconnect-device');
         this.autoconnectSwitch = page.getByTestId('@settings/device/thp-autoconnect');
+        this.deviceForgetButton = page.getByTestId('@settings/device/forget-button');
+        this.deviceForgetConfirmButton = page.getByTestId('@settings/device/forget-button-confirm');
+        this.deviceForgetConfirmContent = page.getByTestId(
+            '@settings/device/forget/confirm-content',
+        );
+        this.deviceForgetCancelButton = page.getByTestId('@settings/device/forget-button-cancel');
+        this.deviceForgetIveRemovedItButton = page.getByTestId(
+            '@settings/device/ive-removed-it-button',
+        );
+        this.deviceForgetIveRemovedItTrezorButton = page.getByTestId(
+            '@settings/device/ive-removed-it-button-trezor',
+        );
+        this.deviceForgetModal = page.getByTestId('@modal');
+        this.deviceForgetHeader = page.getByTestId('@modal/header');
+        this.toastDeviceForgotten = page.getByTestId('@toast/device-forgotten');
+        this.toastDeviceWillBeForgotten = page.getByTestId('@toast/device-will-be-forgotten');
     }
 
     @step()
@@ -64,5 +93,22 @@ export class DeviceTab {
         await this.firmwareInstallButton.click();
         await this.firmwareConfirmSeedCheckbox.click();
         await this.firmwareConfirmSeedButton.click();
+    }
+
+    @step()
+    async completeBluetoothForgetFlow() {
+        await this.deviceForgetIveRemovedItButton.click();
+        await this.deviceForgetIveRemovedItTrezorButton.click();
+    }
+
+    @step()
+    async verifyForgetDeviceModal(translation: TranslationKey) {
+        await expect(this.deviceForgetModal).toBeVisible();
+        await expect(this.deviceForgetHeader).toHaveTranslation(translation);
+    }
+
+    @step()
+    async verifyForgetDeviceContent(translation: TranslationKey[]) {
+        await expect(this.deviceForgetConfirmContent.locator('li')).toHaveTranslation(translation);
     }
 }
