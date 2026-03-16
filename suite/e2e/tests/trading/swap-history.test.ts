@@ -46,6 +46,23 @@ test.describe('Trading - Swap history', { tag: ['@webOnly', '@T3T1', '@T3W1'] },
             );
         });
 
+        await test.step('Verify trades are ordered by date descending', async () => {
+            const sortedTrades = [...SEEDED_TRADES].sort(
+                (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+            );
+            const rows = page
+                .getByTestId('@trading/transactions/list')
+                .locator('[data-testid^="@trading/transactions/list/swap-transaction/"]');
+
+            for (const [index, trade] of sortedTrades.entries()) {
+                await expect(rows.nth(index)).toHaveAttribute(
+                    'data-testid',
+                    `@trading/transactions/list/swap-transaction/${trade.orderId}`,
+                );
+            }
+            await expect(rows).toHaveCount(SEEDED_TRADES.length);
+        });
+
         await test.step('Verify trade appears in history list', async () => {
             const statusMap: Record<string, string> = {
                 SUCCESS: 'Approved',
@@ -53,51 +70,98 @@ test.describe('Trading - Swap history', { tag: ['@webOnly', '@T3T1', '@T3W1'] },
                 CONFIRMING: 'Pending',
             };
 
+            await expect(page.getByTestId('@trading/transactions/count')).toHaveText(
+                `${SEEDED_TRADES.length} swaps`,
+            );
+
             for (const trade of SEEDED_TRADES) {
                 const tradeRow = page.getByTestId(
                     `@trading/transactions/list/swap-transaction/${trade.orderId}`,
                 );
 
                 await expect(tradeRow).toBeVisible();
-                await expect(tradeRow.getByTestId('@trading/form/info/provider')).toContainText(
-                    trade.data.exchange,
-                    { ignoreCase: true },
-                );
-                await expect(tradeRow.getByTestId('@trading/transaction-id')).toContainText(
-                    trade.orderId,
-                );
-                await expect(tradeRow.getByTestId('@trading/transactions/status')).toHaveText(
-                    statusMap[trade.data.status],
-                );
-                const receiveSymbol =
-                    (cryptoIdToSymbol(
+                await expect
+                    .soft(tradeRow.getByTestId('@trading/offers/quote/provider'))
+                    .toContainText(trade.data.exchange, { ignoreCase: true });
+                await expect
+                    .soft(tradeRow.getByTestId('@trading/transaction-id'))
+                    .toContainText(trade.orderId);
+                await expect
+                    .soft(tradeRow.getByTestId('@trading/transactions/status'))
+                    .toHaveText(statusMap[trade.data.status]);
+                const receiveSymbol = (
+                    cryptoIdToSymbol(
                         trade.data.receive as Parameters<typeof cryptoIdToSymbol>[0],
-                    ) ?? trade.data.receive).toUpperCase();
-
-                await expect(
-                    tradeRow.getByTestId('@trading/transactions/send/amount-with-symbol'),
-                ).toHaveText(
-                    `${localizeNumber(trade.data.sendStringAmount)} ${trade.sendSymbol.toUpperCase()}`,
-                );
-                await expect(
-                    tradeRow.getByTestId('@trading/transactions/receive/amount-with-symbol'),
-                ).toHaveText(
-                    `${localizeNumber(trade.data.receiveStringAmount)} ${receiveSymbol}`,
-                );
-
+                    ) ?? trade.data.receive
+                ).toUpperCase();
+                await expect
+                    .soft(tradeRow.getByTestId('@trading/transactions/send/amount-with-symbol'))
+                    .toHaveText(
+                        `${localizeNumber(trade.data.sendStringAmount)} ${trade.sendSymbol.toUpperCase()}`,
+                    );
+                await expect
+                    .soft(tradeRow.getByTestId('@trading/transactions/receive/amount-with-symbol'))
+                    .toHaveText(
+                        `${localizeNumber(trade.data.receiveStringAmount)} ${receiveSymbol}`,
+                    );
+                await expect.soft(tradeRow.getByTestId('@trading/transactions/date')).toBeVisible();
             }
         });
 
-        await test.step('Click on trade to view details', async () => {
-            // SUCCESS_TRADE is the most recent (2025-12-17), so it appears first in the list.
-            const viewDetailsButton = page.getByRole('button', { name: 'View details' }).first();
-            await expect(viewDetailsButton).toBeVisible();
-            await viewDetailsButton.click();
-        });
+        const detailStatusMap: Record<string, string> = {
+            SUCCESS: 'Swap successful',
+            ERROR: 'Transaction failed',
+            CONFIRMING: 'Sending transaction',
+        };
 
-        await test.step('Verify order detail page is displayed', async () => {
-            await expect(page.getByTestId('@trading/transaction/detail')).toBeVisible();
-            await expect(page.getByTestId('@trading/transaction/detail/status')).toBeVisible();
-        });
+        for (const trade of SEEDED_TRADES) {
+            await test.step(`Open detail for trade ${trade.orderId}`, async () => {
+                const tradeRow = page.getByTestId(
+                    `@trading/transactions/list/swap-transaction/${trade.orderId}`,
+                );
+                await tradeRow.getByRole('button', { name: 'View details' }).click();
+            });
+
+            await test.step(`Verify detail page for trade ${trade.orderId}`, async () => {
+                await expect(page.getByTestId('@trading/transaction/detail')).toBeVisible();
+                await expect
+                    .soft(page.getByTestId('@trading/transaction/detail/status'))
+                    .toHaveText(detailStatusMap[trade.data.status]);
+
+                // Verify sidebar send/receive amounts
+                const sidebar = page.getByTestId('@trading/transaction/detail/sidebar');
+                const receiveSymbol = (
+                    cryptoIdToSymbol(
+                        trade.data.receive as Parameters<typeof cryptoIdToSymbol>[0],
+                    ) ?? trade.data.receive
+                ).toUpperCase();
+                const sidebarAmounts = sidebar.getByTestId(
+                    '@trading/offers/quote/crypto-amount-with-symbol',
+                );
+                await expect
+                    .soft(sidebarAmounts.nth(0))
+                    .toHaveText(
+                        `${localizeNumber(trade.data.sendStringAmount)} ${trade.sendSymbol.toUpperCase()}`,
+                    );
+                await expect
+                    .soft(sidebarAmounts.nth(1))
+                    .toHaveText(
+                        `${localizeNumber(trade.data.receiveStringAmount)} ${receiveSymbol}`,
+                    );
+
+                const providerInStatusCard = page
+                    .getByTestId('@trading/transaction/detail/status-card')
+                    .getByTestId('@trading/form/info/provider');
+                await expect.soft(providerInStatusCard).toBeVisible();
+                await expect
+                    .soft(providerInStatusCard)
+                    .toContainText(trade.data.exchange, { ignoreCase: true });
+            });
+
+            await test.step(`Navigate back to transaction list`, async () => {
+                await page.getByTestId('@trading/menu/wallet-trading-transactions').click();
+                await expect(page.getByTestId('@trading/transactions/heading')).toBeVisible();
+            });
+        }
     });
 });
