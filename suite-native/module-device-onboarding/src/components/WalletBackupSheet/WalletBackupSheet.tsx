@@ -4,7 +4,6 @@ import * as Haptics from 'expo-haptics';
 
 import { BackupType } from '@suite-common/suite-types';
 import { BottomSheetModal, BottomSheetModalRef, Button, VStack } from '@suite-native/atoms';
-import { Icon } from '@suite-native/icons';
 import { Translation, useTranslate } from '@suite-native/intl';
 import { prepareNativeStyle, useNativeStyles } from '@trezor/styles';
 
@@ -78,8 +77,9 @@ export const WalletBackupSheet = ({
             </VStack>
             {!showLegacyOptions && (
                 <Button
-                    viewLeft={<Icon name="caretDown" size="medium" />}
-                    colorScheme="tertiaryElevation0"
+                    iconLeft="caretDown"
+                    intent="neutral"
+                    priority="secondary"
                     size="small"
                     style={applyStyle(legacyButtonStyle)}
                     onPress={displayLegacyOptions}

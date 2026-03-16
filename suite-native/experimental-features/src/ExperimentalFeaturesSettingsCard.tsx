@@ -126,9 +126,10 @@ export const ExperimentalFeaturesSettingsCard = () => {
                             <VStack>
                                 <Button
                                     size="small"
-                                    viewLeft="arrowSquareOut"
+                                    iconLeft="arrowSquareOut"
                                     onPress={handleLearnMore}
-                                    colorScheme="tertiaryElevation0"
+                                    intent="neutral"
+                                    priority="secondary"
                                 >
                                     <Translation id="generic.buttons.learnMore" />
                                 </Button>

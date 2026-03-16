@@ -56,7 +56,12 @@ export const SuiteSyncQuotaManager = () => {
                 <Form form={form}>
                     <VStack>
                         <TextInputField label="Quota Manager URL" name="suiteSyncQuotaManagerUrl" />
-                        <Button colorScheme="tertiaryElevation0" size="small" onPress={onSubmit}>
+                        <Button
+                            intent="neutral"
+                            priority="secondary"
+                            size="small"
+                            onPress={onSubmit}
+                        >
                             Save
                         </Button>
                     </VStack>
@@ -108,7 +113,7 @@ export const SuiteSyncQuotaManager = () => {
                         onChange={onToggleEnforceQuotaManager}
                     />
                 </HStack>
-                <Button colorScheme="redBold" onPress={onEraseFetchedData}>
+                <Button intent="critical" priority="primary" onPress={onEraseFetchedData}>
                     Erase fetched data
                 </Button>
             </VStack>

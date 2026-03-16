@@ -144,7 +144,7 @@ export const useDetectDeviceError = () => {
                 type: 'deviceError',
                 pictogramVariant: 'critical',
                 primaryButtonTitle: <Translation id="generic.buttons.eject" />,
-                primaryButtonVariant: 'tertiaryElevation1',
+                primaryButtonColorProps: { intent: 'neutral', priority: 'secondary' },
                 appendix: <IncompatibleFirmwareModalAppendix />,
                 onPressPrimaryButton: () => {
                     handleDisconnect();
@@ -268,7 +268,7 @@ export const useDetectDeviceError = () => {
                 description: <Translation id="moduleDevice.genericErrorModal.description" />,
                 type: 'deviceError',
                 pictogramVariant: 'critical',
-                primaryButtonVariant: 'redBold',
+                primaryButtonColorProps: { intent: 'critical', priority: 'primary' },
                 primaryButtonTitle: (
                     <Translation id="moduleDevice.genericErrorModal.buttons.reconnect" />
                 ),
@@ -281,7 +281,7 @@ export const useDetectDeviceError = () => {
                 secondaryButtonTitle: (
                     <Translation id="moduleDevice.genericErrorModal.buttons.help" />
                 ),
-                secondaryButtonVariant: 'redElevation0',
+                secondaryButtonColorProps: { intent: 'critical', priority: 'secondary' },
                 onPressSecondaryButton: () => openLink(SUITE_MOBILE_SUPPORT_URL),
                 testID: '@device/errors/alert/error',
             });

@@ -86,8 +86,14 @@ export const AlertSheet = ({ alert }: AlertSheetProps) => {
         primaryButtonViewRight,
         onPressSecondaryButton,
         secondaryButtonTitle,
-        primaryButtonVariant = 'primary',
-        secondaryButtonVariant = 'tertiaryElevation1',
+        primaryButtonColorProps = {
+            intent: 'brand',
+            priority: 'primary',
+        },
+        secondaryButtonColorProps = {
+            intent: 'neutral',
+            priority: 'secondary',
+        },
         appendix,
         testID,
     } = alert;
@@ -132,13 +138,12 @@ export const AlertSheet = ({ alert }: AlertSheetProps) => {
                                 {appendix}
                             </VStack>
                             <VStack spacing="sp12">
-                                {/* @ts-expect-error: MergeExclusive disallows both viewLeft and viewRight, but only one is defined at runtime */}
                                 <Button
                                     size="medium"
-                                    colorScheme={primaryButtonVariant}
+                                    {...primaryButtonColorProps}
                                     onPress={handlePressPrimaryButton}
-                                    viewLeft={primaryButtonViewLeft}
-                                    viewRight={primaryButtonViewRight}
+                                    iconLeft={primaryButtonViewLeft}
+                                    iconRight={primaryButtonViewRight}
                                     testID="@alert-sheet/primary-button"
                                 >
                                     {primaryButtonTitle}
@@ -146,7 +151,7 @@ export const AlertSheet = ({ alert }: AlertSheetProps) => {
                                 {secondaryButtonTitle && (
                                     <Button
                                         size="medium"
-                                        colorScheme={secondaryButtonVariant}
+                                        {...secondaryButtonColorProps}
                                         onPress={handlePressSecondaryButton}
                                         testID="@alert-sheet/secondary-button"
                                     >
