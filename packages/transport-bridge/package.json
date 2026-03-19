@@ -2,6 +2,7 @@
     "name": "@trezor/transport-bridge",
     "version": "3.2.1",
     "main": "src/index",
+    "types": "./libDev/src/index.d.ts",
     "license": "See LICENSE.md in repo root",
     "private": true,
     "sideEffects": false,

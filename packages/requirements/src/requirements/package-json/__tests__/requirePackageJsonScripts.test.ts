@@ -13,6 +13,12 @@ const validScripts = {
     'type-check': 'yarn g:tsc --build tsconfig.typecheck.json',
 };
 
+const validPackageJson = {
+    main: 'src/index',
+    types: './libDev/src/index.d.ts',
+    scripts: validScripts,
+};
+
 describe(requirePackageJsonScripts.name, () => {
     let workspaceDir: string;
     let context: WorkspaceContext;
@@ -31,10 +37,7 @@ describe(requirePackageJsonScripts.name, () => {
     });
 
     it('passes when all required scripts are configured correctly', async () => {
-        writeFileSync(
-            join(workspaceDir, 'package.json'),
-            JSON.stringify({ scripts: validScripts }),
-        );
+        writeFileSync(join(workspaceDir, 'package.json'), JSON.stringify(validPackageJson));
 
         const errors = await requirePackageJsonScripts.verify(context);
 
@@ -45,6 +48,8 @@ describe(requirePackageJsonScripts.name, () => {
         writeFileSync(
             join(workspaceDir, 'package.json'),
             JSON.stringify({
+                main: 'src/index',
+                types: './libDev/src/index.d.ts',
                 scripts: {
                     'lint:js': validScripts['lint:js'],
                     'type-check': validScripts['type-check'],
@@ -63,6 +68,8 @@ describe(requirePackageJsonScripts.name, () => {
         writeFileSync(
             join(workspaceDir, 'package.json'),
             JSON.stringify({
+                main: 'src/index',
+                types: './libDev/src/index.d.ts',
                 scripts: {
                     ...validScripts,
                     depcheck: 'depcheck',
@@ -81,6 +88,8 @@ describe(requirePackageJsonScripts.name, () => {
         writeFileSync(
             join(workspaceDir, 'package.json'),
             JSON.stringify({
+                main: 'src/index',
+                types: './libDev/src/index.d.ts',
                 scripts: {
                     ...validScripts,
                     'type-check': 'tsc --build tsconfig.json',
@@ -113,6 +122,35 @@ describe(requirePackageJsonScripts.name, () => {
 
     it('has workspace scope', () => {
         expect(requirePackageJsonScripts.scope).toBe('workspace');
+    });
+
+    it('reports missing local types entry for source-entry workspaces', async () => {
+        writeFileSync(
+            join(workspaceDir, 'package.json'),
+            JSON.stringify({
+                main: 'src/index',
+                scripts: validScripts,
+            }),
+        );
+
+        const errors = await requirePackageJsonScripts.verify(context);
+
+        expect(errors).toEqual([
+            '@trezor/example: types must be "./libDev/src/index.d.ts" in package.json.',
+        ]);
+    });
+
+    it('does not require local types when the workspace has no standard source entrypoint', async () => {
+        writeFileSync(
+            join(workspaceDir, 'package.json'),
+            JSON.stringify({
+                scripts: validScripts,
+            }),
+        );
+
+        const errors = await requirePackageJsonScripts.verify(context);
+
+        expect(errors).toEqual([]);
     });
 
     it('ignores type-check requirement for configured connect example packages', async () => {

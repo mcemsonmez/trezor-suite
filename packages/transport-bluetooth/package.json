@@ -15,6 +15,7 @@
         "transport"
     ],
     "main": "./src/index.ts",
+    "types": "./libDev/src/index.d.ts",
     "browser": "./src/browser.ts",
     "scripts": {
         "depcheck": "yarn g:depcheck",

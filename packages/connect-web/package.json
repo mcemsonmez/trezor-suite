@@ -20,6 +20,7 @@
     ],
     "sideEffects": false,
     "main": "src/index.ts",
+    "types": "./libDev/src/index.d.ts",
     "publishConfig": {
         "main": "./lib/index.js",
         "module": "./libESM/index.mjs",

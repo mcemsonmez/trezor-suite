@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "React Native WebUSB implementation",
     "main": "src/index",
+    "types": "./libDev/src/index.d.ts",
     "scripts": {
         "type-check": "yarn g:tsc --build tsconfig.typecheck.json",
         "open:ios": "open -a \"Xcode\" example/ios",

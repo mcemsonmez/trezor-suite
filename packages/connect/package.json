@@ -20,6 +20,7 @@
     ],
     "sideEffects": false,
     "main": "src/index.ts",
+    "types": "./libDev/src/index.d.ts",
     "browser": {
         "./src/index": "./src/index-browser.ts",
         "./src/index.ts": "./src/index-browser.ts",

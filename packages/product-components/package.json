@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "private": true,
     "main": "src/index",
+    "types": "./libDev/src/index.d.ts",
     "author": "SatoshiLabs s.r.o.",
     "license": "SEE LICENSE IN LICENSE.md",
     "sideEffects": false,

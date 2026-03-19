@@ -16,6 +16,7 @@
         "lint:js": "yarn g:eslint '**/*.{ts,tsx,js}'"
     },
     "main": "./src/index.ts",
+    "types": "./libDev/src/index.d.ts",
     "browser": "./src/index.ts",
     "dependencies": {
         "@trezor/eslint": "workspace:*",

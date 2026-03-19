@@ -26,6 +26,7 @@
         "CHANGELOG.md"
     ],
     "main": "src/index.ts",
+    "types": "./libDev/src/index.d.ts",
     "browser": {
         "socks-proxy-agent": "./src/utils/socks-proxy-agent.ts"
     },

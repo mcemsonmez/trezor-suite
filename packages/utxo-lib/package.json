@@ -21,6 +21,7 @@
         "javascript"
     ],
     "main": "./src/index.ts",
+    "types": "./libDev/src/index.d.ts",
     "files": [
         "lib/",
         "libESM/",

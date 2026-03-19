@@ -6,6 +6,7 @@
     "license": "MIT",
     "private": true,
     "main": "src/index.tsx",
+    "types": "./libDev/src/index.d.ts",
     "scripts": {
         "depcheck": "yarn g:depcheck",
         "build:all": "yarn build:tailwind",

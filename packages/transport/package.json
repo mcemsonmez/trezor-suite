@@ -16,6 +16,7 @@
         "transport"
     ],
     "main": "./src/index.ts",
+    "types": "./libDev/src/index.d.ts",
     "browser": {
         "./src/pinger/ping": "./src/pinger/ping.browser.ts",
         "./src/transports/nodeusb": "./src/transports/nodeusb.browser.ts",

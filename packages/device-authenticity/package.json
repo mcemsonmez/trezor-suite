@@ -26,6 +26,7 @@
         }
     },
     "main": "src/index",
+    "types": "./libDev/src/index.d.ts",
     "files": [
         "lib/",
         "libESM/",

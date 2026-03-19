@@ -15,6 +15,7 @@
     },
     "sideEffects": false,
     "main": "src/index",
+    "types": "./libDev/src/index.d.ts",
     "browser": {
         "ws": "./src/ws-browser"
     },
