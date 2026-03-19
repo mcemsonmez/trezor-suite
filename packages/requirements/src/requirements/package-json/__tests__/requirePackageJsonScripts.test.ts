@@ -10,7 +10,7 @@ const createTempWorkspace = (): string => mkdtempSync(join(tmpdir(), 'package-js
 const validScripts = {
     depcheck: 'yarn g:depcheck',
     'lint:js': "yarn g:eslint '**/*.{ts,tsx,js}'",
-    'type-check': 'yarn g:tsc --build',
+    'type-check': 'yarn g:tsc --build tsconfig.typecheck.json',
 };
 
 describe(requirePackageJsonScripts.name, () => {
@@ -34,22 +34,6 @@ describe(requirePackageJsonScripts.name, () => {
         writeFileSync(
             join(workspaceDir, 'package.json'),
             JSON.stringify({ scripts: validScripts }),
-        );
-
-        const errors = await requirePackageJsonScripts.verify(context);
-
-        expect(errors).toEqual([]);
-    });
-
-    it('passes when type-check script matches the configured regex', async () => {
-        writeFileSync(
-            join(workspaceDir, 'package.json'),
-            JSON.stringify({
-                scripts: {
-                    ...validScripts,
-                    'type-check': 'yarn g:tsc --build tsconfig.json',
-                },
-            }),
         );
 
         const errors = await requirePackageJsonScripts.verify(context);
@@ -93,7 +77,7 @@ describe(requirePackageJsonScripts.name, () => {
         ]);
     });
 
-    it('reports invalid type-check value when it does not match the configured regex', async () => {
+    it('reports invalid type-check value when it does not match the configured command', async () => {
         writeFileSync(
             join(workspaceDir, 'package.json'),
             JSON.stringify({
@@ -107,7 +91,7 @@ describe(requirePackageJsonScripts.name, () => {
         const errors = await requirePackageJsonScripts.verify(context);
 
         expect(errors).toEqual([
-            '@trezor/example: scripts.type-check must be matching /^yarn g:tsc --build.*$/ in package.json.',
+            '@trezor/example: scripts.type-check must be "yarn g:tsc --build tsconfig.typecheck.json" in package.json.',
         ]);
     });
 
@@ -129,6 +113,27 @@ describe(requirePackageJsonScripts.name, () => {
 
     it('has workspace scope', () => {
         expect(requirePackageJsonScripts.scope).toBe('workspace');
+    });
+
+    it('ignores type-check requirement for configured connect example packages', async () => {
+        context = {
+            ...context,
+            workspaceName: 'connect-example-node',
+        };
+
+        writeFileSync(
+            join(workspaceDir, 'package.json'),
+            JSON.stringify({
+                scripts: {
+                    depcheck: validScripts.depcheck,
+                    'lint:js': validScripts['lint:js'],
+                },
+            }),
+        );
+
+        const errors = await requirePackageJsonScripts.verify(context);
+
+        expect(errors).toEqual([]);
     });
 
     it('ignores depcheck requirement for configured packages', async () => {

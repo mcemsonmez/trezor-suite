@@ -27,13 +27,12 @@ const REQUIRED_SCRIPTS: Record<string, RequiredScriptConfig> = {
         ignoredPackages: ['@trezor/eslint', '@suite-common/earn-api'],
     },
     'type-check': {
-        command: /^yarn g:tsc --build.*$/,
+        command: 'yarn g:tsc --build tsconfig.typecheck.json',
         ignoredPackages: [
-            '@trezor/address-validator',
-            '@trezor/suite-desktop',
             'connect-example-electron-main',
             'connect-mobile-example',
             'connect-example-node',
+            '@trezor/webextension-mv3-sw-ts',
         ],
     },
 };

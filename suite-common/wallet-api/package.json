@@ -8,7 +8,7 @@
     "scripts": {
         "depcheck": "yarn g:depcheck",
         "lint:js": "yarn g:eslint '**/*.{ts,tsx,js}'",
-        "type-check": "yarn g:tsc --build",
+        "type-check": "yarn g:tsc --build tsconfig.typecheck.json",
         "format": "prettier --write \"**/*.{ts,yaml,yml,json}\"",
         "orval": "orval --config ./orval.config.ts",
         "fetch-specs": "yarn g:tsx ./scripts/fetchSpec.ts",
