@@ -25,10 +25,10 @@ import {
 } from '@suite-common/wallet-core';
 import { type TokenAddress } from '@suite-common/wallet-types';
 import {
-    convertAmountSubunitsToUnits,
     convertAmountUnitsToSubunits,
     fromBaseCurrencyToCryptoUnit,
     getCryptoAmountWithReserve,
+    getDecimalsForBaseCurrency,
     isZero,
 } from '@suite-common/wallet-utils';
 import { BigNumber, isChanged } from '@trezor/utils';
@@ -68,7 +68,7 @@ export const useTradingFormActions = <T extends TradingSellExchangeFormProps>({
 }: TradingUseFormActionsProps<T>): TradingUseFormActionsReturnProps => {
     const dispatch = useDispatch();
     const { symbol } = account;
-    const { shouldSendInSats } = useBitcoinAmountUnit(symbol);
+    const { isBtcSatsAmountUnit: shouldSendInSats } = useBitcoinAmountUnit(symbol);
     const isNetworkReserveEnabled = useSelector(selectIsNetworkReserveEnabled);
     const accounts = useSelector(selectVisibleDeviceAccounts);
     const isNotFormPage = pageType !== 'form';
@@ -129,9 +129,7 @@ export const useTradingFormActions = <T extends TradingSellExchangeFormProps>({
 
         const rate = await tradingFiatValues.fiatRatesUpdater(mappedBaseCurrencyCode);
         const amount = getValues(TRADING_FORM_OUTPUT_AMOUNT);
-        const formattedAmount = new BigNumber(
-            shouldSendInSats ? convertAmountSubunitsToUnits(amount, networkDecimals) : amount,
-        );
+        const formattedAmount = new BigNumber(amount);
 
         if (
             rate?.rate &&
@@ -140,8 +138,12 @@ export const useTradingFormActions = <T extends TradingSellExchangeFormProps>({
             formattedAmount.gt(0) // formatAmount() returns '-1' on error
         ) {
             const fiatValueBigNumber = formattedAmount.multipliedBy(rate.rate);
+            const fiatDecimals = getDecimalsForBaseCurrency({
+                code: mappedBaseCurrencyCode,
+                isInSats: false,
+            });
 
-            setValue(TRADING_FORM_OUTPUT_FIAT, fiatValueBigNumber.toFixed(2), {
+            setValue(TRADING_FORM_OUTPUT_FIAT, fiatValueBigNumber.toFixed(fiatDecimals), {
                 shouldValidate: true,
             });
         }
