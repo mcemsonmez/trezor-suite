@@ -1,10 +1,11 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-        "outDir": "libDev",
-        "exactOptionalPropertyTypes": true
+        "outDir": "libDev"
     },
     "references": [
-        { "path": "../../packages/type-utils" }
+        {
+            "path": "../../packages/type-utils"
+        }
     ]
 }

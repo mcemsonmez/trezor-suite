@@ -38,5 +38,8 @@
         "react-native-mmkv": "~4.1.2",
         "react-native-restart": "0.0.27",
         "redux-persist": "6.0.0"
+    },
+    "devDependencies": {
+        "@types/w3c-web-usb": "^1.0.10"
     }
 }

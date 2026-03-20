@@ -1,6 +1,11 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
+        "paths": {
+            "fela-native": [
+                "./src/fela-native.d.ts"
+            ]
+        },
         "noImplicitAny": false,
         "outDir": "libDev"
     },

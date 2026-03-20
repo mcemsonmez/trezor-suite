@@ -9,7 +9,10 @@ import type { PrederivedAddress, VinVout } from '../types/backend';
 
 export const isTxConfirmed = ({ blockHeight = -1 }: { blockHeight?: number }) => blockHeight > 0;
 
-type VinVoutAddressTx = { vin: Pick<VinVout, 'addresses'>[]; vout: Pick<VinVout, 'addresses'>[] };
+type VinVoutAddressTx = {
+    vin: { addresses?: VinVout['addresses'] }[];
+    vout: { addresses?: VinVout['addresses'] }[];
+};
 
 export const getAllTxAddresses = ({ vin, vout }: VinVoutAddressTx) =>
     vin

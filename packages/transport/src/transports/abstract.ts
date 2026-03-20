@@ -42,7 +42,7 @@ export interface AbstractTransportParams {
     id: string;
 }
 
-export const isTransportInstance = (transport?: AbstractTransport) => {
+export const isTransportInstance = (transport?: unknown): transport is AbstractTransport => {
     const requiredMethods = [
         'init',
         'enumerate',
@@ -55,7 +55,9 @@ export const isTransportInstance = (transport?: AbstractTransport) => {
     ] as const;
 
     if (transport && typeof transport === 'object') {
-        return !requiredMethods.some(m => typeof transport[m] !== 'function');
+        const transportRecord = transport as Record<(typeof requiredMethods)[number], unknown>;
+
+        return !requiredMethods.some(method => typeof transportRecord[method] !== 'function');
     }
 
     return false;

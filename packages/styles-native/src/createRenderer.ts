@@ -1,1 +1,1 @@
-export { createRenderer } from 'fela-native';
+export const { createRenderer } = require('fela-native');

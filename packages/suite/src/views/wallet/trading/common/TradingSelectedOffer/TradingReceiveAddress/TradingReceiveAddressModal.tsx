@@ -39,9 +39,10 @@ export const TradingReceiveAddressModal = () => {
         required: translationString('TR_EXCHANGE_RECEIVING_ADDRESS_REQUIRED'),
         validate: value => {
             if (cryptoId) {
-                const symbol =
-                    cryptoIdToNetwork(cryptoId)?.symbol ?? cryptoIdToNativeCoinSymbol(cryptoId);
-                if (value && !addressValidator.validate(value, symbol)) {
+                const network = cryptoIdToNetwork(cryptoId);
+                const symbol = network?.symbol ?? cryptoIdToNativeCoinSymbol(cryptoId);
+
+                if (value && !addressValidator.validate(value, symbol, network?.networkType)) {
                     return translationString('TR_EXCHANGE_RECEIVING_ADDRESS_INVALID');
                 }
             }

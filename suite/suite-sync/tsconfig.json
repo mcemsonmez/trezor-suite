@@ -1,15 +1,16 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-        "outDir": "./libDev",
-        "exactOptionalPropertyTypes": true
+        "outDir": "libDev"
     },
     "include": [".", "**/*.json"],
     "references": [
         {
             "path": "../../suite-common/delegated-identity-key-types"
         },
-        { "path": "../../suite-common/device" },
+        {
+            "path": "../../suite-common/device"
+        },
         {
             "path": "../../suite-common/platform-encryption"
         },
@@ -28,9 +29,17 @@
         {
             "path": "../../suite-common/wallet-utils"
         },
-        { "path": "../analytics" },
-        { "path": "../../packages/components" },
-        { "path": "../../packages/connect" },
-        { "path": "../../packages/theme" }
+        {
+            "path": "../analytics"
+        },
+        {
+            "path": "../../packages/components"
+        },
+        {
+            "path": "../../packages/connect"
+        },
+        {
+            "path": "../../packages/theme"
+        }
     ]
 }

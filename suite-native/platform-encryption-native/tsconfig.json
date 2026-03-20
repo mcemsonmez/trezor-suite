@@ -1,14 +1,17 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-        "outDir": "libDev",
-        "exactOptionalPropertyTypes": true
+        "outDir": "libDev"
     },
     "references": [
         {
             "path": "../../suite-common/platform-encryption"
         },
-        { "path": "../storage" },
-        { "path": "../../packages/type-utils" }
+        {
+            "path": "../storage"
+        },
+        {
+            "path": "../../packages/type-utils"
+        }
     ]
 }
