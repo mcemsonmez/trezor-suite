@@ -3,7 +3,6 @@ export type * from './params';
 
 export type { Response } from './responses';
 export * from './baseCurrency';
-export { MESSAGES, RESPONSES } from './constants';
 
 export type { Transaction as BlockbookTransaction } from './blockbook';
 export type { TronAccountExtraData } from './blockbook-api';
