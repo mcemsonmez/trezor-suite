@@ -11,7 +11,23 @@ export type ExperimentalFeature =
     | 'nft-section'
     | 'slip24'
     | 'experimental-networks'
+    | 'suite-sync'
     | 'tron-view-only';
+
+/**
+ * Set of features that are truly experimental (as opposed to regular features
+ * behind a feature toggle). Used to determine the feedback category.
+ */
+export const experimentalFeatureSet: ReadonlySet<ExperimentalFeature> = new Set<ExperimentalFeature>([
+    'password-manager',
+    'tor-external',
+    'testnet-networks',
+    'nft-section',
+    'slip24',
+    'experimental-networks',
+    'suite-sync',
+    'tron-view-only',
+]);
 
 /**
  * Maps Experimental feature to its generic product name TranslationKey.
@@ -23,6 +39,7 @@ export const translatedExperimentalFeatures: ExperimentalFeatureTranslation = {
     'password-manager': 'TR_EXPERIMENTAL_PASSWORD_MANAGER',
     'testnet-networks': 'TR_EXPERIMENTAL_TESTNET_NETWORKS',
     slip24: 'TR_EXPERIMENTAL_SLIP24',
+    'suite-sync': 'TR_EXPERIMENTAL_SUITE_SYNC_TITLE',
     'tron-view-only': 'TR_EXPERIMENTAL_TRON_VIEW_ONLY',
 };
 

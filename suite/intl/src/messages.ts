@@ -11151,29 +11151,29 @@ export const messages = defineMessages({
         id: 'TR_NON_TRADABLE_TOKENS',
         defaultMessage: 'Non-tradable tokens',
     },
-    TR_EXPERIMENTAL_FEEDBACK_MODAL_HEADING: {
-        id: 'TR_EXPERIMENTAL_FEEDBACK_MODAL_HEADING',
-        defaultMessage: 'Rate your {feature} experience',
+    TR_FEATURE_FEEDBACK_MODAL_HEADING: {
+        id: ‘TR_FEATURE_FEEDBACK_MODAL_HEADING’,
+        defaultMessage: ‘Rate your {feature} experience’,
     },
-    TR_EXPERIMENTAL_FEEDBACK_CARD_HEADING: {
-        id: 'TR_EXPERIMENTAL_FEEDBACK_CARD_HEADING',
-        defaultMessage: 'Rate your {feature} experience',
+    TR_FEATURE_FEEDBACK_CARD_HEADING: {
+        id: ‘TR_FEATURE_FEEDBACK_CARD_HEADING’,
+        defaultMessage: ‘Rate your {feature} experience’,
     },
-    TR_EXPERIMENTAL_FEEDBACK_CARD_DESCRIPTION: {
-        id: 'TR_EXPERIMENTAL_FEEDBACK_CARD_DESCRIPTION',
-        defaultMessage: 'Tell us what’s working and what’s not—we read every reply.',
+    TR_FEATURE_FEEDBACK_CARD_DESCRIPTION: {
+        id: ‘TR_FEATURE_FEEDBACK_CARD_DESCRIPTION’,
+        defaultMessage: ‘Tell us what’s working and what’s not—we read every reply.’,
     },
-    TR_EXPERIMENTAL_FEEDBACK_MODAL_DESCRIPTION: {
-        id: 'TR_EXPERIMENTAL_FEEDBACK_MODAL_DESCRIPTION',
-        defaultMessage: 'Tell us what’s working and what’s not—we read every reply.',
+    TR_FEATURE_FEEDBACK_MODAL_DESCRIPTION: {
+        id: ‘TR_FEATURE_FEEDBACK_MODAL_DESCRIPTION’,
+        defaultMessage: ‘Tell us what’s working and what’s not—we read every reply.’,
     },
-    TR_EXPERIMENTAL_FEEDBACK_MODAL_SUBMIT: {
-        id: 'TR_EXPERIMENTAL_FEEDBACK_MODAL_SUBMIT',
-        defaultMessage: 'Submit',
+    TR_FEATURE_FEEDBACK_MODAL_SUBMIT: {
+        id: ‘TR_FEATURE_FEEDBACK_MODAL_SUBMIT’,
+        defaultMessage: ‘Submit’,
     },
-    TR_EXPERIMENTAL_FEEDBACK_CARD_RATE_BUTTON: {
-        id: 'TR_EXPERIMENTAL_FEEDBACK_CARD_RATE_BUTTON',
-        defaultMessage: 'Sure thing',
+    TR_FEATURE_FEEDBACK_CARD_RATE_BUTTON: {
+        id: ‘TR_FEATURE_FEEDBACK_CARD_RATE_BUTTON’,
+        defaultMessage: ‘Sure thing’,
     },
     TR_OUTSIDE_STAKING_CARD_TITLE: {
         id: 'TR_OUTSIDE_STAKING_CARD_TITLE',

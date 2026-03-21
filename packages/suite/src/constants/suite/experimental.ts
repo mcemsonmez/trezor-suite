@@ -16,6 +16,7 @@ const experimentalNetworkNames = experimentalNetworks.map(network => network.nam
 export type ExperimentalFeatureConfig = {
     title: ExtendedMessageDescriptor;
     description: ExtendedMessageDescriptor;
+    isExperimental: boolean;
     knowledgeBaseUrl?: Url;
     routeName?: Route['name'];
     isDisabled?: (context: { isDebug: boolean }) => boolean;
@@ -26,12 +27,14 @@ export const EXPERIMENTAL_FEATURES: Record<ExperimentalFeature, ExperimentalFeat
     'password-manager': {
         title: { id: 'TR_EXPERIMENTAL_PASSWORD_MANAGER' },
         description: { id: 'TR_EXPERIMENTAL_PASSWORD_MANAGER_DESCRIPTION' },
+        isExperimental: true,
         knowledgeBaseUrl: EXPERIMENTAL_PASSWORD_MANAGER_KB_URL,
         routeName: 'password-manager-index',
     },
     'tor-external': {
         title: { id: 'TR_EXPERIMENTAL_TOR_EXTERNAL' },
         description: { id: 'TR_EXPERIMENTAL_TOR_EXTERNAL_DESCRIPTION' },
+        isExperimental: true,
         knowledgeBaseUrl: HELP_CENTER_TOR_URL,
         isDisabled: () => !isDesktop(),
         onToggle: async ({ newValue }) => {
@@ -47,17 +50,21 @@ export const EXPERIMENTAL_FEATURES: Record<ExperimentalFeature, ExperimentalFeat
     'testnet-networks': {
         title: { id: 'TR_EXPERIMENTAL_TESTNET_NETWORKS' },
         description: { id: 'TR_EXPERIMENTAL_TESTNET_NETWORKS_DESCRIPTION' },
+        isExperimental: true,
     },
     'nft-section': {
         title: { id: 'TR_EXPERIMENTAL_NFT_SECTION' },
         description: { id: 'TR_EXPERIMENTAL_NFT_SECTION_DESCRIPTION' },
+        isExperimental: true,
     },
     slip24: {
         title: { id: 'TR_EXPERIMENTAL_SLIP24' },
         description: { id: 'TR_EXPERIMENTAL_SLIP24_DESCRIPTION' },
+        isExperimental: true,
         isDisabled: ({ isDebug }) => !isDebug,
     },
     'experimental-networks': {
+        isExperimental: true,
         title: {
             id: 'TR_EXPERIMENTAL_NETWORKS',
             values: {
@@ -74,8 +81,20 @@ export const EXPERIMENTAL_FEATURES: Record<ExperimentalFeature, ExperimentalFeat
         },
         isDisabled: () => experimentalNetworks.length === 0,
     },
+    'suite-sync': {
+        title: { id: 'TR_EXPERIMENTAL_SUITE_SYNC_TITLE' },
+        description: { id: 'TR_EXPERIMENTAL_SUITE_SYNC_DESCRIPTION' },
+        isExperimental: true,
+        onToggle: ({ newValue, services }) => {
+            if (!newValue) {
+                // Turn off Suite Sync
+                services.suiteSync.turnOffSuiteSync();
+            }
+        },
+    },
     'tron-view-only': {
         title: { id: 'TR_EXPERIMENTAL_TRON_VIEW_ONLY' },
         description: { id: 'TR_EXPERIMENTAL_TRON_VIEW_ONLY_DESCRIPTION' },
+        isExperimental: true,
     },
 };
