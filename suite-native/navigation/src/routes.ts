@@ -32,7 +32,7 @@ export enum RootStackRoutes {
     Storybook = 'Storybook',
     PassphraseStack = 'PassphraseStack',
     StellarManageTokenStack = 'StellarManageTokenStack',
-    ExperimentalFeedbackModal = 'ExperimentalFeedbackModal',
+    FeatureFeedbackModal = 'FeatureFeedbackModal',
 }
 
 export enum AppTabsRoutes {

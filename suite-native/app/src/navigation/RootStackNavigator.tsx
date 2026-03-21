@@ -34,7 +34,7 @@ import {
     StakingDetailScreen,
     StakingManagementScreen,
 } from '@suite-native/module-earn';
-import { ExperimentalFeedbackModalScreen } from '@suite-native/module-home';
+import { FeatureFeedbackModalScreen } from '@suite-native/module-home';
 import { OnboardingStackNavigator } from '@suite-native/module-onboarding';
 import { PassphraseStackNavigator } from '@suite-native/module-passphrase';
 import { SendStackNavigator } from '@suite-native/module-send';
@@ -217,8 +217,8 @@ export const RootStackNavigator = () => {
                     component={StellarManageTokenStackNavigator}
                 />
                 <RootStack.Screen
-                    name={RootStackRoutes.ExperimentalFeedbackModal}
-                    component={ExperimentalFeedbackModalScreen}
+                    name={RootStackRoutes.FeatureFeedbackModal}
+                    component={FeatureFeedbackModalScreen}
                 />
 
                 {isDevelopOrDebugEnv() && (
