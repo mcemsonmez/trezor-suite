@@ -1,10 +1,13 @@
-import bs58check from 'bs58check';
+import { sha256 } from '@noble/hashes/sha2.js';
+import { base58check as createBase58check } from '@scure/base';
 
 import { ERRORS } from '@trezor/connect-common/src/constants';
 import { Assert } from '@trezor/schema-utils';
 
 import type { PROTO } from '../../constants';
 import { TezosOperation } from '../../types/api/tezos';
+
+const bs58check = createBase58check(sha256);
 
 const PREFIX = {
     B: new Uint8Array([1, 52]),
