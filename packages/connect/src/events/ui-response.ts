@@ -89,7 +89,7 @@ export type UiResponseEvent =
     | UiResponseFee
     | UiResponseFirmwares;
 
-export type UiResponseMessage = UiResponseEvent & { event: typeof UI_EVENT };
+export type UiResponseMessage = UiResponseEvent & { event: typeof UI_EVENT; requestId?: string };
 
 export const createUiResponse: MessageFactoryFn<typeof UI_EVENT, UiResponseEvent> = (
     type,

@@ -328,19 +328,27 @@ export default class GetAccountInfo extends AbstractMethod<'getAccountInfo', Req
 
         discovery.on('progress', accounts => {
             this.postMessage(
-                createUiMessage(UI_REQUEST.SELECT_ACCOUNT, {
-                    type: 'progress',
-                    coinInfo,
-                    accounts,
-                }),
+                createUiMessage(
+                    UI_REQUEST.SELECT_ACCOUNT,
+                    {
+                        type: 'progress',
+                        coinInfo,
+                        accounts,
+                    },
+                    dfd.requestId,
+                ),
             );
         });
         discovery.on('complete', () => {
             this.postMessage(
-                createUiMessage(UI_REQUEST.SELECT_ACCOUNT, {
-                    type: 'end',
-                    coinInfo,
-                }),
+                createUiMessage(
+                    UI_REQUEST.SELECT_ACCOUNT,
+                    {
+                        type: 'end',
+                        coinInfo,
+                    },
+                    dfd.requestId,
+                ),
             );
         });
         // catch error from discovery process
@@ -351,12 +359,16 @@ export default class GetAccountInfo extends AbstractMethod<'getAccountInfo', Req
         // set select account view
         // this view will be updated from discovery events
         this.postMessage(
-            createUiMessage(UI_REQUEST.SELECT_ACCOUNT, {
-                type: 'start',
-                accountTypes: discovery.types.map(t => t.type),
-                defaultAccountType,
-                coinInfo,
-            }),
+            createUiMessage(
+                UI_REQUEST.SELECT_ACCOUNT,
+                {
+                    type: 'start',
+                    accountTypes: discovery.types.map(t => t.type),
+                    defaultAccountType,
+                    coinInfo,
+                },
+                dfd.requestId,
+            ),
         );
 
         // wait for user action
