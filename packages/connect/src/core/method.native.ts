@@ -1,10 +1,8 @@
 import { TypedError } from '@trezor/connect-common/src/constants/errors';
 
 import * as Methods from '../api';
-import type { ModuleName } from '../constants/network';
-import { MODULES } from '../constants/network';
+import { MODULES, type ModuleName } from '../constants/network';
 import type { CoreCallMessage } from '../events';
-import type { MethodContext } from './AbstractMethod';
 
 const moduleMethods = {
     cardano: require('../api/cardano/api'),
@@ -21,7 +19,7 @@ const getMethodModule = (method: CoreCallMessage['payload']['method']) =>
     MODULES.find(module => method.startsWith(module));
 
 // eslint-disable-next-line require-await
-export const getMethod = async (message: CoreCallMessage, context: MethodContext) => {
+export const getMethod = async (message: CoreCallMessage) => {
     const { method } = message.payload;
     if (typeof method !== 'string') {
         throw TypedError('Method_InvalidParameter', 'Message method is not set');
@@ -32,7 +30,7 @@ export const getMethod = async (message: CoreCallMessage, context: MethodContext
     const MethodConstructor = methods[method];
 
     if (MethodConstructor) {
-        return new MethodConstructor({ ...message, ...context } as any);
+        return new MethodConstructor(message);
     }
 
     throw TypedError('Method_InvalidParameter', `Method ${method} not found`);

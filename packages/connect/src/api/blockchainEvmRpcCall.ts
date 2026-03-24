@@ -1,7 +1,12 @@
 import { ERRORS } from '@trezor/connect-common/src/constants';
 
 import { initBlockchain, isBackendSupported } from '../backend/BlockchainLink';
-import type { MethodMessage, MethodPermission, Payload } from '../core/AbstractMethod';
+import type {
+    MethodContext,
+    MethodMessage,
+    MethodPermission,
+    Payload,
+} from '../core/AbstractMethod';
 import { AbstractMethod } from '../core/AbstractMethod';
 import type { CoinInfo } from '../types';
 import { validateParams } from './common/paramsValidator';
@@ -59,10 +64,10 @@ export default class BlockchainEvmRpcCall extends AbstractMethod<'blockchainEvmR
         return 'Blockchain Evm Rpc Call';
     }
 
-    async run() {
+    async run({ sendCoreMessage }: MethodContext) {
         const backend = await initBlockchain(
             this.params.coinInfo,
-            this.postMessage,
+            sendCoreMessage,
             this.params.identity,
         );
         const response = await backend.rpcCall(this.params.request);

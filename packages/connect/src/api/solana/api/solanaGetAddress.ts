@@ -3,6 +3,7 @@ import { Assert } from '@trezor/schema-utils';
 
 import type { PROTO } from '../../../constants';
 import type {
+    MethodContext,
     MethodMessage,
     MethodPermission,
     MethodReturnType,
@@ -101,7 +102,7 @@ export default class SolanaGetAddress extends AbstractMethod<'solanaGetAddress',
         return response.message;
     }
 
-    async run() {
+    async run({ sendCoreMessage }: MethodContext) {
         const responses: MethodReturnType<typeof this.name> = [];
         for (let i = 0; i < this.params.length; i++) {
             const batch = this.params[i];
@@ -133,7 +134,7 @@ export default class SolanaGetAddress extends AbstractMethod<'solanaGetAddress',
 
             if (this.hasBundle) {
                 // send progress
-                this.postMessage(
+                sendCoreMessage(
                     createUiMessage(UI_REQUEST.BUNDLE_PROGRESS, {
                         total: this.params.length,
                         progress: i,
