@@ -13,18 +13,28 @@ import { ActionColumn, SectionItem, SettingsSection, TextColumn } from '@trezor/
 import { type BreakpointFlags } from '@trezor/theme';
 import { spacings } from '@trezor/theme';
 
+import {
+    WipeSuiteSyncLabels,
+    type WipeSuiteSyncLabelsOnError,
+    type WipeSuiteSyncLabelsState,
+} from './WipeSuiteSyncLabels';
+
 const selectIsBelowLaptop = (state: { window: BreakpointFlags }) => state.window.isBelowLaptop;
 
 type SuiteSyncSettingsProps = {
     isSuiteSyncFeatureEnabled: boolean;
+    onError: WipeSuiteSyncLabelsOnError;
+    state: WipeSuiteSyncLabelsState;
     suiteSync: SuiteSync;
 };
 
 export const SuiteSyncSettings = ({
     isSuiteSyncFeatureEnabled,
+    onError,
+    state,
     suiteSync,
 }: SuiteSyncSettingsProps) => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isRelayUrlLoading, setIsRelayUrlLoading] = useState(false);
 
     const dispatch = useDispatch();
     const isBelowLaptop = useSelector(selectIsBelowLaptop);
@@ -43,13 +53,13 @@ export const SuiteSyncSettings = ({
     };
 
     const onRelayUrlSave = async () => {
-        setIsLoading(true);
+        setIsRelayUrlLoading(true);
 
         await suiteSync.changeRelayUrl({ relayUrl });
 
         // Fake it, to make some UI interaction for the user
         setTimeout(() => {
-            setIsLoading(false);
+            setIsRelayUrlLoading(false);
         }, 300);
     };
 
@@ -69,13 +79,13 @@ export const SuiteSyncSettings = ({
                     <Column gap={spacings.xxs}>
                         <Input
                             data-testid="@settings/debug/suite-sync/relay-url-input"
-                            isDisabled={isLoading}
+                            isDisabled={isRelayUrlLoading}
                             value={relayUrl}
                             onChange={e => setRelayUrl(e.target.value)}
                             rightContent={
                                 <Button
                                     data-testid="@settings/debug/suite-sync/save-button"
-                                    isLoading={isLoading}
+                                    isLoading={isRelayUrlLoading}
                                     onClick={onRelayUrlSave}
                                     size="small"
                                 >
@@ -89,6 +99,7 @@ export const SuiteSyncSettings = ({
                     </Column>
                 </ActionColumn>
             </SectionItem>
+            <WipeSuiteSyncLabels onError={onError} state={state} suiteSync={suiteSync} />
             <SectionItem>
                 <TextColumn title="Suite Sync (Evolu) Debug" />
                 <ActionColumn>
