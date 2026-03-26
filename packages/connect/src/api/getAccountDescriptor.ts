@@ -1,7 +1,7 @@
 import { ERRORS } from '@trezor/connect-common/src/constants';
 import { Assert } from '@trezor/schema-utils';
 
-import { getFirmwareRange } from './common/paramsValidator';
+import { bundlify, getFirmwareRange } from './common/paramsValidator';
 import type {
     MethodContext,
     MethodMessage,
@@ -37,11 +37,8 @@ export default class GetAccountDescriptor extends AbstractMethod<
     }
 
     init() {
-        // create a bundle with only one batch if bundle doesn't exists
-        this.hasBundle = !!this.payload.bundle;
-        const payload = !this.payload.bundle
-            ? { ...this.payload, bundle: [this.payload] }
-            : this.payload;
+        const { hasBundle, payload } = bundlify(this.payload);
+        this.hasBundle = hasBundle;
 
         // validate bundle type
         Assert(Bundle(GetAccountDescriptorParams), payload);

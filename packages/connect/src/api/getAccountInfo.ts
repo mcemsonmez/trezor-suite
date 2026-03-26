@@ -15,7 +15,7 @@ import { getCoinInfo } from '../data/coinInfo';
 import { UI_REQUEST, UI_RESPONSE, createUiMessage } from '../events';
 import type { AccountInfo, AccountUtxo, CoinInfo, DerivationPath } from '../types';
 import { Discovery } from './common/Discovery';
-import { getFirmwareRange, validateParams } from './common/paramsValidator';
+import { bundlify, getFirmwareRange, validateParams } from './common/paramsValidator';
 import type { GetAccountInfo as GetAccountInfoParams } from '../types/api/getAccountInfo';
 import { getAccountLabel, isUtxoBased } from '../utils/accountUtils';
 import { getSerializedPath, validatePath } from '../utils/pathUtils';
@@ -41,11 +41,8 @@ export default class GetAccountInfo extends AbstractMethod<'getAccountInfo', Req
         // assume that device will not be used
         let willUseDevice = false;
 
-        // create a bundle with only one batch if bundle doesn't exists
-        this.hasBundle = !!this.payload.bundle;
-        const payload = !this.payload.bundle
-            ? { ...this.payload, bundle: [this.payload] }
-            : this.payload;
+        const { hasBundle, payload } = bundlify(this.payload);
+        this.hasBundle = hasBundle;
 
         // validate bundle type
         validateParams(payload, [{ name: 'bundle', type: 'array' }]);

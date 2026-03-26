@@ -16,7 +16,7 @@ import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle } from '../../../types';
 import { CardanoGetAddress as CardanoGetAddressSchema } from '../../../types/api/cardano';
 import { fromHardened, getSerializedPath } from '../../../utils/pathUtils';
-import { getFirmwareRange } from '../../common/paramsValidator';
+import { bundlify, getFirmwareRange } from '../../common/paramsValidator';
 import {
     addressParametersFromProto,
     addressParametersToProto,
@@ -49,11 +49,8 @@ export default class CardanoGetAddress extends AbstractMethod<'cardanoGetAddress
     }
 
     init() {
-        // create a bundle with only one batch if bundle doesn't exists
-        this.hasBundle = !!this.payload.bundle;
-        const payload = !this.payload.bundle
-            ? { ...this.payload, bundle: [this.payload] }
-            : this.payload;
+        const { hasBundle, payload } = bundlify(this.payload);
+        this.hasBundle = hasBundle;
 
         // validate bundle type
         Assert(Bundle(CardanoGetAddressSchema), payload);

@@ -15,7 +15,7 @@ import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle } from '../../../types';
 import { CardanoGetPublicKey as CardanoGetPublicKeySchema } from '../../../types/api/cardano';
 import { fromHardened, getSerializedPath, validatePath } from '../../../utils/pathUtils';
-import { getFirmwareRange } from '../../common/paramsValidator';
+import { bundlify, getFirmwareRange } from '../../common/paramsValidator';
 interface Params {
     proto: PROTO.CardanoGetPublicKey;
     suppressBackupWarning?: boolean;
@@ -39,11 +39,8 @@ export default class CardanoGetPublicKey extends AbstractMethod<'cardanoGetPubli
     }
 
     init() {
-        // create a bundle with only one batch if bundle doesn't exists
-        this.hasBundle = !!this.payload.bundle;
-        const payload = !this.payload.bundle
-            ? { ...this.payload, bundle: [this.payload] }
-            : this.payload;
+        const { hasBundle, payload } = bundlify(this.payload);
+        this.hasBundle = hasBundle;
 
         // validate bundle type
         Assert(Bundle(CardanoGetPublicKeySchema), payload);

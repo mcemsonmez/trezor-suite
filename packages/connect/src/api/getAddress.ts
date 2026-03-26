@@ -4,7 +4,7 @@ import { ERRORS } from '@trezor/connect-common/src/constants';
 import { Assert } from '@trezor/schema-utils';
 
 import type { PROTO } from '../constants';
-import { getFirmwareRange, validateCoinPath } from './common/paramsValidator';
+import { bundlify, getFirmwareRange, validateCoinPath } from './common/paramsValidator';
 import type {
     MethodContext,
     MethodMessage,
@@ -39,14 +39,11 @@ export default class GetAddress extends AbstractMethod<'getAddress', Params[]> {
     }
 
     init() {
-        // create a bundle with only one batch if bundle doesn't exists
-        this.hasBundle = !!this.payload.bundle;
-        const payload = !this.payload.bundle
-            ? { ...this.payload, bundle: [this.payload] }
-            : this.payload;
+        const { hasBundle, payload } = bundlify(this.payload);
+        this.hasBundle = hasBundle;
 
         // Workaround to allow empty signature in multisig (issue #10841)
-        payload?.bundle.forEach(bundleElement => {
+        payload.bundle.forEach(bundleElement => {
             if (bundleElement.multisig && bundleElement.multisig?.signatures === undefined) {
                 bundleElement.multisig.signatures = Array(
                     bundleElement.multisig?.pubkeys.length,

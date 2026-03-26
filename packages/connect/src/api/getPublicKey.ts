@@ -9,7 +9,7 @@ import { getBitcoinNetwork } from '../data/coinInfo';
 import { UI_REQUEST, createUiMessage } from '../events';
 import type { BitcoinNetworkInfo } from '../types';
 import { Bundle } from '../types';
-import { getFirmwareRange, validateCoinPath } from './common/paramsValidator';
+import { bundlify, getFirmwareRange, validateCoinPath } from './common/paramsValidator';
 import { GetPublicKey as GetPublicKeySchema } from '../types/api/getPublicKey';
 import { getPublicKeyLabel } from '../utils/accountUtils';
 import { validatePath } from '../utils/pathUtils';
@@ -29,11 +29,8 @@ export default class GetPublicKey extends AbstractMethod<'getPublicKey', Params[
     }
 
     init() {
-        // create a bundle with only one batch if bundle doesn't exists
-        this.hasBundle = !!this.payload.bundle;
-        const payload = !this.payload.bundle
-            ? { ...this.payload, bundle: [this.payload] }
-            : this.payload;
+        const { hasBundle, payload } = bundlify(this.payload);
+        this.hasBundle = hasBundle;
 
         // validate bundle type
         Assert(Bundle(GetPublicKeySchema), payload);

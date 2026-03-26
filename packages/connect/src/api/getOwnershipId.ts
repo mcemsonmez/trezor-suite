@@ -1,7 +1,7 @@
 import type { MessagesSchema as PROTO } from '@trezor/protobuf';
 import { Assert } from '@trezor/schema-utils';
 
-import { getFirmwareRange } from './common/paramsValidator';
+import { bundlify, getFirmwareRange } from './common/paramsValidator';
 import type { MethodContext, MethodPermission, MethodReturnType } from '../core/AbstractMethod';
 import { AbstractMethod } from '../core/AbstractMethod';
 import { getBitcoinNetwork } from '../data/coinInfo';
@@ -21,11 +21,8 @@ export default class GetOwnershipId extends AbstractMethod<
     }
 
     init() {
-        // create a bundle with only one batch if bundle doesn't exists
-        this.hasBundle = !!this.payload.bundle;
-        const payload = !this.payload.bundle
-            ? { ...this.payload, bundle: [this.payload] }
-            : this.payload;
+        const { hasBundle, payload } = bundlify(this.payload);
+        this.hasBundle = hasBundle;
 
         // validate bundle type
         Assert(Bundle(GetOwnershipIdSchema), payload);

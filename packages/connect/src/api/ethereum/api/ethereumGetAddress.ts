@@ -19,7 +19,7 @@ import { GetAddress as GetAddressSchema } from '../../../types/params';
 import { getNetworkLabel } from '../../../utils/ethereumUtils';
 import { stripHexPrefix } from '../../../utils/formatUtils';
 import { getSerializedPath, getSlip44ByPath, validatePath } from '../../../utils/pathUtils';
-import { getFirmwareRange } from '../../common/paramsValidator';
+import { bundlify, getFirmwareRange } from '../../common/paramsValidator';
 import {
     decodeEthereumDefinition,
     ethereumNetworkInfoFromDefinition,
@@ -47,11 +47,8 @@ export default class EthereumGetAddress extends AbstractMethod<'ethereumGetAddre
     }
 
     init() {
-        // create a bundle with only one batch if bundle doesn't exists
-        this.hasBundle = !!this.payload.bundle;
-        const payload = !this.payload.bundle
-            ? { ...this.payload, bundle: [this.payload] }
-            : this.payload;
+        const { hasBundle, payload } = bundlify(this.payload);
+        this.hasBundle = hasBundle;
 
         // validate bundle type
         Assert(Bundle(GetAddressSchema), payload);
