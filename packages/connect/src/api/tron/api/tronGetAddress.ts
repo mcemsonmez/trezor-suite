@@ -10,7 +10,7 @@ import type {
 import { AbstractMethod } from '../../../core/AbstractMethod';
 import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle } from '../../../types';
-import { GetAddress as GetAddressSchema } from '../../../types/api/getAddress';
+import { GetAddress as GetAddressSchema } from '../../../types/params';
 import { fromHardened, getSerializedPath, validatePath } from '../../../utils/pathUtils';
 
 type Params = PROTO.TronGetAddress & {

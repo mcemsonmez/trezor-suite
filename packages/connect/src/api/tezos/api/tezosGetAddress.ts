@@ -13,7 +13,7 @@ import { AbstractMethod } from '../../../core/AbstractMethod';
 import { getMiscNetwork } from '../../../data/coinInfo';
 import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle } from '../../../types';
-import { GetAddress as GetAddressSchema } from '../../../types/api/getAddress';
+import { GetAddress as GetAddressSchema } from '../../../types/params';
 import { fromHardened, getSerializedPath, validatePath } from '../../../utils/pathUtils';
 import { getFirmwareRange } from '../../common/paramsValidator';
 

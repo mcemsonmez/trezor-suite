@@ -14,7 +14,7 @@ import { getEthereumNetwork, getUniqueNetworks } from '../../../data/coinInfo';
 import { UI_REQUEST, createUiMessage } from '../../../events';
 import type { EthereumNetworkInfoDefinitionValues } from '../../../types';
 import { Bundle } from '../../../types';
-import { GetAddress as GetAddressSchema } from '../../../types/api/getAddress';
+import { GetAddress as GetAddressSchema } from '../../../types/params';
 import { getNetworkLabel } from '../../../utils/ethereumUtils';
 import { stripHexPrefix } from '../../../utils/formatUtils';
 import { getSerializedPath, getSlip44ByPath, validatePath } from '../../../utils/pathUtils';
