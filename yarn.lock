@@ -15575,6 +15575,8 @@ __metadata:
   resolution: "@trezor/blockchain-link-blockbook@workspace:packages/blockchain-link-blockbook"
   dependencies:
     "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-blockfrost": "workspace:*"
+    "@trezor/blockchain-link-ripple": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
     "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/e2e-utils": "workspace:*"
@@ -15717,15 +15719,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@trezor/blockchain-link-test@workspace:packages/blockchain-link-test"
   dependencies:
+    "@stellar/stellar-sdk": "npm:14.5.0"
     "@trezor/blockchain-link": "workspace:*"
     "@trezor/blockchain-link-blockbook": "workspace:*"
     "@trezor/blockchain-link-blockfrost": "workspace:*"
     "@trezor/blockchain-link-ripple": "workspace:*"
+    "@trezor/blockchain-link-types": "workspace:*"
     "@trezor/e2e-utils": "workspace:*"
     "@trezor/eslint": "workspace:*"
     "@types/jest": "npm:29.5.12"
     "@types/node": "npm:22.13.10"
     "@types/web": "npm:^0.0.197"
+    tiny-worker: "npm:^2.3.0"
+    xrpl: "npm:4.6.0"
   languageName: unknown
   linkType: soft
 
