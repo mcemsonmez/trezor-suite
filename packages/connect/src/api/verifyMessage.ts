@@ -9,11 +9,16 @@ import { AbstractMethod } from '../core/AbstractMethod';
 import { getFirmwareRange } from './common/paramsValidator';
 import { getBitcoinNetwork } from '../data/coinInfo';
 import { validateModelOneMessageSize } from '../device/validateMessageSize';
-import { VerifyMessage as VerifyMessageSchema } from '../types';
+import { type CoinInfo, VerifyMessage as VerifyMessageSchema } from '../types';
 import { messageToHex } from '../utils/formatUtils';
 import { getLabel } from '../utils/pathUtils';
 
-export default class VerifyMessage extends AbstractMethod<'verifyMessage', PROTO.VerifyMessage> {
+type Params = {
+    proto: PROTO.VerifyMessage;
+    coinInfo: CoinInfo;
+};
+
+export default class VerifyMessage extends AbstractMethod<'verifyMessage', Params> {
     get requiredPermissions(): MethodPermission[] {
         return ['read', 'write'];
     }
@@ -36,28 +41,25 @@ export default class VerifyMessage extends AbstractMethod<'verifyMessage', PROTO
             : Buffer.from(payload.message, 'utf8').toString('hex');
         const signatureHex = Buffer.from(payload.signature, 'base64').toString('hex');
 
-        this.params = {
+        const proto = {
             address: payload.address,
             signature: signatureHex,
             message: messageHex,
             coin_name: coinInfo.name,
         };
+
+        this.params = { proto, coinInfo };
     }
 
     get info() {
-        const coinInfo = getBitcoinNetwork(this.payload.coin);
-        if (!coinInfo) {
-            return 'Verify message';
-        }
-
-        return getLabel('Verify #NETWORK message', coinInfo);
+        return getLabel('Verify #NETWORK message', this.params.coinInfo);
     }
 
     async run() {
-        validateModelOneMessageSize(this.getDevice(), this.params.message);
+        validateModelOneMessageSize(this.getDevice(), this.params.proto.message);
 
         const cmd = this.getDevice().getCommands();
-        const response = await cmd.typedCall('VerifyMessage', 'Success', this.params);
+        const response = await cmd.typedCall('VerifyMessage', 'Success', this.params.proto);
 
         return response.message;
     }
