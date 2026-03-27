@@ -11414,8 +11414,8 @@ __metadata:
   dependencies:
     "@suite-common/wallet-config": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
+    "@trezor/blockchain-link-blockfrost": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
-    "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/connect": "workspace:*"
     "@trezor/utils": "workspace:*"
     date-fns: "npm:^4.1.0"
@@ -11501,7 +11501,6 @@ __metadata:
     "@suite-common/wallet-core": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
     "@suite-common/wallet-utils": "workspace:*"
-    "@trezor/blockchain-link": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
     "@trezor/connect": "workspace:*"
     "@trezor/utils": "workspace:*"
@@ -11664,7 +11663,7 @@ __metadata:
   dependencies:
     "@suite-common/wallet-config": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
-    "@trezor/blockchain-link-types": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
     "@trezor/connect": "workspace:*"
   languageName: unknown
   linkType: soft
@@ -11681,9 +11680,8 @@ __metadata:
     "@suite-common/wallet-config": "workspace:*"
     "@suite-common/wallet-constants": "workspace:*"
     "@suite-common/wallet-utils": "workspace:*"
-    "@trezor/blockchain-link": "workspace:*"
-    "@trezor/blockchain-link-types": "workspace:*"
-    "@trezor/blockchain-link-utils": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
+    "@trezor/blockchain-link-solana": "workspace:*"
     "@trezor/env-utils": "workspace:*"
     "@trezor/type-utils": "workspace:*"
     "@trezor/utils": "workspace:*"
@@ -11971,8 +11969,8 @@ __metadata:
     "@suite-common/wallet-config": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
     "@suite-common/wallet-utils": "workspace:*"
+    "@trezor/blockchain-link-blockfrost": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:^"
-    "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/connect": "workspace:*"
     "@trezor/env-utils": "workspace:*"
     "@trezor/eslint": "workspace:*"
@@ -12026,7 +12024,6 @@ __metadata:
     "@suite-common/test-utils": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
     "@suite-common/wallet-utils": "workspace:*"
-    "@trezor/blockchain-link": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
     "@trezor/utils": "workspace:*"
     react: "npm:19.2.4"
@@ -12112,8 +12109,10 @@ __metadata:
     "@suite-common/wallet-constants": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
     "@suite-common/wallet-utils": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
+    "@trezor/blockchain-link-solana": "workspace:*"
+    "@trezor/blockchain-link-stellar": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
-    "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/connect": "workspace:*"
     "@trezor/connect-common": "workspace:^"
     "@trezor/device-utils": "workspace:*"
@@ -12160,8 +12159,9 @@ __metadata:
     "@suite-common/wallet-constants": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
     "@trezor/address-validator": "workspace:*"
+    "@trezor/blockchain-link-blockfrost": "workspace:*"
+    "@trezor/blockchain-link-solana": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
-    "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/connect": "workspace:*"
     "@trezor/device-utils": "workspace:*"
     "@trezor/type-utils": "workspace:*"
@@ -14008,8 +14008,8 @@ __metadata:
     "@suite-native/navigation": "workspace:*"
     "@suite-native/test-utils": "workspace:*"
     "@suite-native/transaction-management": "workspace:*"
+    "@trezor/blockchain-link-stellar": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
-    "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/styles-native": "workspace:*"
     "@trezor/urls": "workspace:*"
     "@trezor/utils": "workspace:*"
@@ -14326,7 +14326,7 @@ __metadata:
     "@suite-native/device-mutex": "workspace:*"
     "@suite-native/tokens": "workspace:*"
     "@suite-native/transaction-management": "workspace:*"
-    "@trezor/blockchain-link-types": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
     "@trezor/type-utils": "workspace:*"
     "@trezor/utils": "workspace:*"
   languageName: unknown
@@ -14637,7 +14637,7 @@ __metadata:
     "@suite-common/wallet-core": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
     "@suite-common/wallet-utils": "workspace:*"
-    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-types": "workspace:*"
     react: "npm:19.2.4"
   languageName: unknown
   linkType: soft
@@ -15570,13 +15570,200 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@trezor/blockchain-link-blockbook@workspace:*, @trezor/blockchain-link-blockbook@workspace:packages/blockchain-link-blockbook":
+  version: 0.0.0-use.local
+  resolution: "@trezor/blockchain-link-blockbook@workspace:packages/blockchain-link-blockbook"
+  dependencies:
+    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-types": "workspace:*"
+    "@trezor/blockchain-link-utils": "workspace:*"
+    "@trezor/e2e-utils": "workspace:*"
+    "@trezor/env-utils": "workspace:*"
+    "@trezor/eslint": "workspace:*"
+    "@trezor/type-utils": "workspace:*"
+    "@trezor/utils": "workspace:*"
+    "@types/jest": "npm:29.5.12"
+    "@types/node": "npm:22.13.10"
+    "@types/web": "npm:^0.0.197"
+  peerDependencies:
+    tslib: ^2.6.2
+  languageName: unknown
+  linkType: soft
+
+"@trezor/blockchain-link-blockfrost@workspace:*, @trezor/blockchain-link-blockfrost@workspace:packages/blockchain-link-blockfrost":
+  version: 0.0.0-use.local
+  resolution: "@trezor/blockchain-link-blockfrost@workspace:packages/blockchain-link-blockfrost"
+  dependencies:
+    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-types": "workspace:*"
+    "@trezor/blockchain-link-utils": "workspace:*"
+    "@trezor/e2e-utils": "workspace:*"
+    "@trezor/env-utils": "workspace:*"
+    "@trezor/eslint": "workspace:*"
+    "@trezor/utils": "workspace:*"
+    "@types/jest": "npm:29.5.12"
+    "@types/node": "npm:22.13.10"
+    "@types/web": "npm:^0.0.197"
+  peerDependencies:
+    tslib: ^2.6.2
+  languageName: unknown
+  linkType: soft
+
+"@trezor/blockchain-link-electrum@workspace:*, @trezor/blockchain-link-electrum@workspace:packages/blockchain-link-electrum":
+  version: 0.0.0-use.local
+  resolution: "@trezor/blockchain-link-electrum@workspace:packages/blockchain-link-electrum"
+  dependencies:
+    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
+    "@trezor/blockchain-link-types": "workspace:*"
+    "@trezor/blockchain-link-utils": "workspace:*"
+    "@trezor/env-utils": "workspace:*"
+    "@trezor/eslint": "workspace:*"
+    "@trezor/type-utils": "workspace:*"
+    "@trezor/utils": "workspace:*"
+    "@trezor/utxo-lib": "workspace:*"
+    "@types/jest": "npm:29.5.12"
+    "@types/node": "npm:22.13.10"
+    "@types/web": "npm:^0.0.197"
+    socks-proxy-agent: "npm:8.0.5"
+  peerDependencies:
+    tslib: ^2.6.2
+  languageName: unknown
+  linkType: soft
+
+"@trezor/blockchain-link-evm-rpc@workspace:*, @trezor/blockchain-link-evm-rpc@workspace:packages/blockchain-link-evm-rpc":
+  version: 0.0.0-use.local
+  resolution: "@trezor/blockchain-link-evm-rpc@workspace:packages/blockchain-link-evm-rpc"
+  dependencies:
+    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
+    "@trezor/blockchain-link-types": "workspace:*"
+    "@trezor/eslint": "workspace:*"
+    "@types/node": "npm:22.13.10"
+    "@types/web": "npm:^0.0.197"
+    viem: "npm:^2.46.3"
+  peerDependencies:
+    tslib: ^2.6.2
+  languageName: unknown
+  linkType: soft
+
+"@trezor/blockchain-link-ripple@workspace:*, @trezor/blockchain-link-ripple@workspace:packages/blockchain-link-ripple":
+  version: 0.0.0-use.local
+  resolution: "@trezor/blockchain-link-ripple@workspace:packages/blockchain-link-ripple"
+  dependencies:
+    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-types": "workspace:*"
+    "@trezor/e2e-utils": "workspace:*"
+    "@trezor/env-utils": "workspace:*"
+    "@trezor/eslint": "workspace:*"
+    "@trezor/type-utils": "workspace:*"
+    "@trezor/utils": "workspace:*"
+    "@types/jest": "npm:29.5.12"
+    "@types/node": "npm:22.13.10"
+    "@types/web": "npm:^0.0.197"
+    xrpl: "npm:4.6.0"
+  peerDependencies:
+    tslib: ^2.6.2
+  languageName: unknown
+  linkType: soft
+
+"@trezor/blockchain-link-solana@workspace:*, @trezor/blockchain-link-solana@workspace:packages/blockchain-link-solana":
+  version: 0.0.0-use.local
+  resolution: "@trezor/blockchain-link-solana@workspace:packages/blockchain-link-solana"
+  dependencies:
+    "@solana-program/compute-budget": "npm:^0.8.0"
+    "@solana-program/stake": "npm:^0.2.1"
+    "@solana-program/token": "npm:^0.5.1"
+    "@solana-program/token-2022": "npm:^0.4.2"
+    "@solana/addresses": "npm:^2.3.0"
+    "@solana/keys": "npm:^2.3.0"
+    "@solana/kit": "npm:^2.3.0"
+    "@solana/rpc-api": "npm:^2.3.0"
+    "@solana/rpc-types": "npm:^2.3.0"
+    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-types": "workspace:*"
+    "@trezor/env-utils": "workspace:*"
+    "@trezor/eslint": "workspace:*"
+    "@trezor/type-utils": "workspace:*"
+    "@trezor/utils": "workspace:*"
+    "@types/jest": "npm:29.5.12"
+    "@types/node": "npm:22.13.10"
+    "@types/web": "npm:^0.0.197"
+  peerDependencies:
+    tslib: ^2.6.2
+  languageName: unknown
+  linkType: soft
+
+"@trezor/blockchain-link-stellar@workspace:*, @trezor/blockchain-link-stellar@workspace:packages/blockchain-link-stellar":
+  version: 0.0.0-use.local
+  resolution: "@trezor/blockchain-link-stellar@workspace:packages/blockchain-link-stellar"
+  dependencies:
+    "@stellar/stellar-sdk": "npm:14.5.0"
+    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-types": "workspace:*"
+    "@trezor/env-utils": "workspace:*"
+    "@trezor/eslint": "workspace:*"
+    "@trezor/type-utils": "workspace:*"
+    "@trezor/utils": "workspace:*"
+    "@types/jest": "npm:29.5.12"
+    "@types/node": "npm:22.13.10"
+    "@types/web": "npm:^0.0.197"
+  peerDependencies:
+    tslib: ^2.6.2
+  languageName: unknown
+  linkType: soft
+
+"@trezor/blockchain-link-test@workspace:packages/blockchain-link-test":
+  version: 0.0.0-use.local
+  resolution: "@trezor/blockchain-link-test@workspace:packages/blockchain-link-test"
+  dependencies:
+    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
+    "@trezor/blockchain-link-blockfrost": "workspace:*"
+    "@trezor/blockchain-link-ripple": "workspace:*"
+    "@trezor/e2e-utils": "workspace:*"
+    "@trezor/eslint": "workspace:*"
+    "@types/jest": "npm:29.5.12"
+    "@types/node": "npm:22.13.10"
+    "@types/web": "npm:^0.0.197"
+  languageName: unknown
+  linkType: soft
+
 "@trezor/blockchain-link-types@workspace:*, @trezor/blockchain-link-types@workspace:^, @trezor/blockchain-link-types@workspace:packages/blockchain-link-types":
   version: 0.0.0-use.local
   resolution: "@trezor/blockchain-link-types@workspace:packages/blockchain-link-types"
   dependencies:
     "@trezor/type-utils": "workspace:*"
     "@trezor/utils": "workspace:*"
-    "@trezor/utxo-lib": "workspace:*"
+  peerDependencies:
+    tslib: ^2.6.2
+  languageName: unknown
+  linkType: soft
+
+"@trezor/blockchain-link-ui@workspace:packages/blockchain-link-ui":
+  version: 0.0.0-use.local
+  resolution: "@trezor/blockchain-link-ui@workspace:packages/blockchain-link-ui"
+  dependencies:
+    "@babel/preset-typescript": "npm:^7.28.5"
+    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
+    "@trezor/blockchain-link-blockfrost": "workspace:*"
+    "@trezor/blockchain-link-evm-rpc": "workspace:*"
+    "@trezor/blockchain-link-ripple": "workspace:*"
+    "@trezor/blockchain-link-solana": "workspace:*"
+    "@trezor/blockchain-link-stellar": "workspace:*"
+    "@trezor/eslint": "workspace:*"
+    "@types/node": "npm:22.13.10"
+    babel-loader: "npm:^10.0.0"
+    buffer: "npm:^6.0.3"
+    crypto-browserify: "npm:3.12.0"
+    html-webpack-plugin: "npm:5.6.6"
+    process: "npm:^0.11.10"
+    stream-browserify: "npm:3.0.0"
+    webpack: "npm:5.104.1"
+    webpack-cli: "npm:6.0.1"
+    webpack-plugin-serve: "npm:^1.6.0"
+    worker-loader: "npm:^3.0.8"
   peerDependencies:
     tslib: ^2.6.2
   languageName: unknown
@@ -15586,17 +15773,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@trezor/blockchain-link-utils@workspace:packages/blockchain-link-utils"
   dependencies:
-    "@solana/addresses": "npm:^2.3.0"
-    "@solana/keys": "npm:^2.3.0"
-    "@solana/rpc-api": "npm:^2.3.0"
-    "@solana/rpc-types": "npm:^2.3.0"
-    "@stellar/stellar-sdk": "npm:14.5.0"
     "@trezor/blockchain-link-types": "workspace:*"
-    "@trezor/env-utils": "workspace:*"
     "@trezor/eslint": "workspace:*"
-    "@trezor/type-utils": "workspace:*"
     "@trezor/utils": "workspace:*"
-    xrpl: "npm:4.6.0"
   peerDependencies:
     tslib: ^2.6.2
   languageName: unknown
@@ -15606,33 +15785,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@trezor/blockchain-link@workspace:packages/blockchain-link"
   dependencies:
-    "@solana-program/compute-budget": "npm:^0.8.0"
-    "@solana-program/stake": "npm:^0.2.1"
-    "@solana-program/token": "npm:^0.5.1"
-    "@solana-program/token-2022": "npm:^0.4.2"
-    "@solana/kit": "npm:^2.3.0"
-    "@solana/rpc-types": "npm:^2.3.0"
-    "@stellar/stellar-sdk": "npm:14.5.0"
     "@trezor/blockchain-link-types": "workspace:*"
-    "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/e2e-utils": "workspace:*"
-    "@trezor/env-utils": "workspace:*"
     "@trezor/eslint": "workspace:*"
     "@trezor/type-utils": "workspace:*"
     "@trezor/utils": "workspace:*"
-    "@trezor/utxo-lib": "workspace:*"
     "@trezor/websocket-client": "workspace:*"
     "@types/jest": "npm:29.5.12"
     "@types/node": "npm:22.13.10"
     "@types/web": "npm:^0.0.197"
-    crypto-browserify: "npm:3.12.0"
-    html-webpack-plugin: "npm:5.6.6"
     socks-proxy-agent: "npm:8.0.5"
-    stream-browserify: "npm:^3.0.0"
     tiny-worker: "npm:^2.3.0"
-    viem: "npm:^2.46.3"
-    webpack: "npm:5.104.1"
-    xrpl: "npm:4.6.0"
   peerDependencies:
     tslib: ^2.6.2
   languageName: unknown
@@ -15651,7 +15814,8 @@ __metadata:
   resolution: "@trezor/coinjoin@workspace:packages/coinjoin"
   dependencies:
     "@suite-common/suite-constants": "workspace:*"
-    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
+    "@trezor/blockchain-link-electrum": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
     "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/eslint": "workspace:*"
@@ -15949,8 +16113,14 @@ __metadata:
     "@solana-program/token-2022": "npm:^0.4.2"
     "@solana/kit": "npm:^2.3.0"
     "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
+    "@trezor/blockchain-link-blockfrost": "workspace:*"
+    "@trezor/blockchain-link-electrum": "workspace:*"
+    "@trezor/blockchain-link-evm-rpc": "workspace:*"
+    "@trezor/blockchain-link-ripple": "workspace:*"
+    "@trezor/blockchain-link-solana": "workspace:*"
+    "@trezor/blockchain-link-stellar": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
-    "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/connect-common": "workspace:*"
     "@trezor/connect-data": "workspace:*"
     "@trezor/crypto-utils": "workspace:*"
@@ -16638,9 +16808,11 @@ __metadata:
     "@testing-library/user-event": "npm:^14.6.1"
     "@trezor/address-validator": "workspace:*"
     "@trezor/analytics-uploader": "workspace:*"
-    "@trezor/blockchain-link": "workspace:*"
+    "@trezor/blockchain-link-blockbook": "workspace:*"
+    "@trezor/blockchain-link-blockfrost": "workspace:*"
+    "@trezor/blockchain-link-solana": "workspace:*"
+    "@trezor/blockchain-link-stellar": "workspace:*"
     "@trezor/blockchain-link-types": "workspace:*"
-    "@trezor/blockchain-link-utils": "workspace:*"
     "@trezor/coinjoin": "workspace:*"
     "@trezor/components": "workspace:*"
     "@trezor/connect": "workspace:*"
@@ -43461,7 +43633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stream-browserify@npm:^3.0.0":
+"stream-browserify@npm:3.0.0, stream-browserify@npm:^3.0.0":
   version: 3.0.0
   resolution: "stream-browserify@npm:3.0.0"
   dependencies:
@@ -47363,7 +47535,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:^6.0.1":
+"webpack-cli@npm:6.0.1, webpack-cli@npm:^6.0.1":
   version: 6.0.1
   resolution: "webpack-cli@npm:6.0.1"
   dependencies:

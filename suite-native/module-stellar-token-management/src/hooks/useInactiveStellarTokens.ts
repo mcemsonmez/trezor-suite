@@ -7,8 +7,9 @@ import {
 } from '@suite-common/token-definitions';
 import { type AccountsRootState, selectAccountByKey } from '@suite-common/wallet-core';
 import { type AccountKey } from '@suite-common/wallet-types';
-import { type TokenDetailByMint, type TokenInfo } from '@trezor/blockchain-link-types';
-import { STELLAR_DECIMALS, getTokenMetadata } from '@trezor/blockchain-link-utils/src/stellar';
+import { type TokenDetailByMint } from '@trezor/blockchain-link-stellar/src/types';
+import { STELLAR_DECIMALS, getTokenMetadata } from '@trezor/blockchain-link-stellar/src/utils';
+import { type TokenInfo } from '@trezor/blockchain-link-types';
 import { createLazy } from '@trezor/utils';
 
 export interface StellarTokenInfo extends TokenInfo {

@@ -1,9 +1,6 @@
-import type {
-    BlockchainLinkParams,
-    ServerInfo,
-    SubscriptionAccountInfo,
-} from '@trezor/blockchain-link';
+import type { BlockchainLinkParams } from '@trezor/blockchain-link';
 import { BlockchainLink } from '@trezor/blockchain-link';
+import type { ServerInfo, SubscriptionAccountInfo } from '@trezor/blockchain-link-types';
 import { ERRORS } from '@trezor/connect-common/src/constants';
 
 import type { CoreEventMessage } from '../events';
