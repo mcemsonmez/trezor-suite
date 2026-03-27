@@ -16,6 +16,7 @@ import {
     type TradingSellFormProps,
     isCountrySubdivisionEmpty,
     mapFiatCurrencyCodeToBaseCurrencyCode,
+    tradingActions,
     tradingExchangeActions,
 } from '@suite-common/trading';
 import {
@@ -266,16 +267,22 @@ export const useTradingFormActions = <T extends TradingSellExchangeFormProps>({
                 : maxAmount;
 
             setValue(TRADING_FORM_OUTPUT_AMOUNT, cryptoInputValue, { shouldDirty: true });
-        } else {
-            setValue(TRADING_FORM_OUTPUT_AMOUNT, '', { shouldDirty: true });
         }
 
         setValue(TRADING_FORM_OUTPUT_MAX, 0, { shouldDirty: true });
-        setValue(TRADING_FORM_OUTPUT_FIAT, '', { shouldDirty: true });
         clearErrors([TRADING_FORM_OUTPUT_FIAT, TRADING_FORM_OUTPUT_AMOUNT]);
 
         setFractionButton(1);
+
+        // Clear quotes immediately to prevent stale quote usage during compose
+        if (type === 'sell') {
+            dispatch(tradingActions.savePaymentMethods([]));
+        } else if (type === 'exchange') {
+            dispatch(tradingExchangeActions.saveSelectedQuote(undefined));
+        }
+
         composeRequest(TRADING_FORM_OUTPUT_AMOUNT);
+        setValue(TRADING_FORM_OUTPUT_FIAT, '', { shouldDirty: true });
     };
 
     // reset preselectedQuote when opening swap form

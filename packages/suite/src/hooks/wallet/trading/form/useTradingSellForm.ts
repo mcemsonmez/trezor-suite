@@ -172,9 +172,7 @@ export const useTradingSellForm = ({
     const isAmountEmpty = output?.amount === '';
     const noProviders = Object.keys(sellInfo?.providerInfos ?? {}).length === 0;
     const isInitialDataLoading = !sellInfo?.providerInfos;
-    const isFormLoading = isInitialDataLoading || formState.isSubmitting || isLoading;
-    const isFormInvalid = !(formIsValid && hasValues);
-    const isLoadingOrInvalid = noProviders || isFormLoading || isFormInvalid;
+
     const quotesByPaymentMethod = getTradingQuotesByPaymentMethod<TradingSellType>(
         quotes,
         values?.paymentMethod?.value ?? '',
@@ -208,6 +206,11 @@ export const useTradingSellForm = ({
         methods,
         setShowReserveBanner,
     });
+
+    const isFormLoading =
+        isInitialDataLoading || formState.isSubmitting || isLoading || isComposing;
+    const isFormInvalid = !(formIsValid && hasValues);
+    const isLoadingOrInvalid = noProviders || isFormLoading || isFormInvalid;
 
     const { toggleAmountInCrypto } = useTradingCurrencySwitcher<TradingSellFormProps>({
         account,
