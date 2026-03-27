@@ -1,5 +1,4 @@
 import type { ParsedUrlQuery } from 'querystring';
-import * as url from 'url';
 
 export interface ParsedRequestUrl {
     protocol: string | null;
@@ -10,25 +9,60 @@ export interface ParsedRequestUrl {
     hash: string | null;
 }
 
+/** Dummy base used to let the WHATWG URL constructor handle relative paths. */
+const DUMMY_BASE = 'http://0.0.0.0';
+
 /**
  * Parse a request URL (typically a relative path like `/foo?a=1`) into its components.
- * Returns the same shape as `url.parse(requestUrl, true)` for the fields that are
- * consumed by HttpServer and http-receiver handlers.
+ * Uses the WHATWG URL API internally; returns the same shape that the legacy
+ * `url.parse(requestUrl, true)` produced for the fields consumed by HttpServer
+ * and http-receiver handlers.
  */
 export const parseRequestUrl = (requestUrl: string): ParsedRequestUrl => {
-    const { protocol, hostname, pathname, query, search, hash } = url.parse(requestUrl, true);
+    const parsed = new URL(requestUrl, DUMMY_BASE);
 
-    return { protocol, hostname, pathname, query, search, hash };
+    const isAbsolute = /^[a-z][a-z\d+\-.]*:\/\//i.test(requestUrl);
+
+    const query: ParsedUrlQuery = {};
+    for (const key of new Set(parsed.searchParams.keys())) {
+        const values = parsed.searchParams.getAll(key);
+        query[key] = values.length === 1 ? values[0] : values;
+    }
+
+    return {
+        protocol: isAbsolute ? parsed.protocol : null,
+        hostname: isAbsolute ? parsed.hostname : null,
+        pathname: parsed.pathname,
+        query,
+        search: parsed.search || null,
+        hash: parsed.hash || null,
+    };
 };
 
 /**
  * Format a parsed request URL back into a URL string.
- * Counterpart to `parseRequestUrl` — replaces `url.format({ protocol, hostname, pathname, query })`.
+ * Counterpart to `parseRequestUrl`.
  */
 export const formatRequestUrl = ({
     protocol,
     hostname,
     pathname,
     query,
-}: Pick<ParsedRequestUrl, 'protocol' | 'hostname' | 'pathname' | 'query'>): string =>
-    url.format({ protocol, hostname, pathname, query });
+}: Pick<ParsedRequestUrl, 'protocol' | 'hostname' | 'pathname' | 'query'>): string => {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+        if (Array.isArray(value)) {
+            for (const v of value) {
+                if (v !== undefined) params.append(key, v);
+            }
+        } else if (value !== undefined) {
+            params.append(key, value);
+        }
+    }
+
+    const qs = params.toString();
+    const base =
+        protocol && hostname ? `${protocol}//${hostname}${pathname || '/'}` : pathname || '/';
+
+    return qs ? `${base}?${qs}` : base;
+};
