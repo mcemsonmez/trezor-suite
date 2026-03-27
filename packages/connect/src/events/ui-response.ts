@@ -46,6 +46,7 @@ export interface UiResponsePassphrase {
         passphraseOnDevice?: boolean;
         save?: boolean;
     };
+    requestId?: string;
 }
 
 export interface UiResponseThpPairingTag {
