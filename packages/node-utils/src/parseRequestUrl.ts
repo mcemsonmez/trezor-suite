@@ -1,4 +1,4 @@
-import type { ParsedUrlQuery } from 'querystring';
+import querystring, { type ParsedUrlQuery } from 'querystring';
 
 export interface ParsedRequestUrl {
     protocol: string | null;
@@ -14,34 +14,32 @@ const DUMMY_BASE = 'http://0.0.0.0';
 
 /**
  * Parse a request URL (typically a relative path like `/foo?a=1`) into its components.
- * Uses the WHATWG URL API internally; returns the same shape that the legacy
- * `url.parse(requestUrl, true)` produced for the fields consumed by HttpServer
- * and http-receiver handlers.
+ * Uses the WHATWG URL API for splitting the URL into pathname/search/hash, and
+ * `querystring.parse` for query-string decoding (preserving the same semantics as
+ * the legacy `url.parse(requestUrl, true)` — `+` is decoded as space, `%20` likewise).
  */
 export const parseRequestUrl = (requestUrl: string): ParsedRequestUrl => {
     const parsed = new URL(requestUrl, DUMMY_BASE);
 
     const isAbsolute = /^[a-z][a-z\d+\-.]*:\/\//i.test(requestUrl);
 
-    const query: ParsedUrlQuery = {};
-    for (const key of new Set(parsed.searchParams.keys())) {
-        const values = parsed.searchParams.getAll(key);
-        query[key] = values.length === 1 ? values[0] : values;
-    }
+    const search = parsed.search || null;
+    const query: ParsedUrlQuery = search ? querystring.parse(search.slice(1)) : {};
 
     return {
         protocol: isAbsolute ? parsed.protocol : null,
         hostname: isAbsolute ? parsed.hostname : null,
         pathname: parsed.pathname,
         query,
-        search: parsed.search || null,
+        search,
         hash: parsed.hash || null,
     };
 };
 
 /**
  * Format a parsed request URL back into a URL string.
- * Counterpart to `parseRequestUrl`.
+ * Counterpart to `parseRequestUrl` — uses `querystring.stringify` for query
+ * serialization (encodes spaces as `%20`, matching the legacy `url.format` behaviour).
  */
 export const formatRequestUrl = ({
     protocol,
@@ -49,18 +47,7 @@ export const formatRequestUrl = ({
     pathname,
     query,
 }: Pick<ParsedRequestUrl, 'protocol' | 'hostname' | 'pathname' | 'query'>): string => {
-    const params = new URLSearchParams();
-    for (const [key, value] of Object.entries(query)) {
-        if (Array.isArray(value)) {
-            for (const v of value) {
-                if (v !== undefined) params.append(key, v);
-            }
-        } else if (value !== undefined) {
-            params.append(key, value);
-        }
-    }
-
-    const qs = params.toString();
+    const qs = querystring.stringify(query);
     const base =
         protocol && hostname ? `${protocol}//${hostname}${pathname || '/'}` : pathname || '/';
 
