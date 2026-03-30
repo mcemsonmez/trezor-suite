@@ -8,15 +8,13 @@ import { DEVICE, UI_REQUEST } from '../events';
 
 export default class ThpGetCredentials extends AbstractMethod<'thpGetCredentials'> {
     constructor(message: MethodMessage<'thpGetCredentials'>) {
-        super(message);
+        super(message, undefined);
         this.allowDeviceMode = [UI_REQUEST.INITIALIZE, UI_REQUEST.SEEDLESS];
         this.useDeviceState = false;
     }
     get requiredPermissions(): MethodPermission[] {
         return ['management'];
     }
-
-    init() {}
 
     async run() {
         const thpState = this.getDevice().getThpState();

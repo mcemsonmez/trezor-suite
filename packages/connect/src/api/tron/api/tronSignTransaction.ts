@@ -18,21 +18,12 @@ export default class TronSignTransaction extends AbstractMethod<'tronSignTransac
     progress = 0;
 
     constructor(message: MethodMessage<'tronSignTransaction'>) {
-        super(message);
-        this.requiredDeviceCapabilities = ['Capability_Tron'];
-    }
-
-    get requiredPermissions(): MethodPermission[] {
-        return ['read', 'write'];
-    }
-
-    init() {
-        const { payload } = this;
+        const { payload } = message;
         Assert(TronSignTransactionSchema, payload);
 
         const path = validatePath(payload.path, 3);
 
-        this.params = {
+        const params = {
             tx: {
                 address_n: path,
                 ref_block_bytes: payload.ref_block_bytes,
@@ -45,6 +36,13 @@ export default class TronSignTransaction extends AbstractMethod<'tronSignTransac
             contractType: payload.contract[0].type,
             contract: payload.contract[0].parameter.value,
         };
+
+        super(message, params);
+        this.requiredDeviceCapabilities = ['Capability_Tron'];
+    }
+
+    get requiredPermissions(): MethodPermission[] {
+        return ['read', 'write'];
     }
 
     get info() {

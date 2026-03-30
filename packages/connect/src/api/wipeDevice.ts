@@ -8,7 +8,7 @@ import { getFirmwareRange } from './common/paramsValidator';
 
 export default class WipeDevice extends AbstractMethod<'wipeDevice'> {
     constructor(message: MethodMessage<'wipeDevice'>) {
-        super(message);
+        super(message, undefined);
 
         this.allowDeviceMode = [UI_REQUEST.INITIALIZE, UI_REQUEST.SEEDLESS, UI_REQUEST.BOOTLOADER];
         this.useDeviceState = false;
@@ -17,10 +17,6 @@ export default class WipeDevice extends AbstractMethod<'wipeDevice'> {
     }
     get requiredPermissions(): MethodPermission[] {
         return ['management'];
-    }
-
-    init() {
-        // Configuration already set in constructor
     }
 
     get confirmation() {

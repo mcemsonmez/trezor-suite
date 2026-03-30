@@ -18,20 +18,11 @@ export default class CipherKeyValue extends AbstractMethod<
     hasBundle?: boolean;
 
     constructor(message: MethodMessage<'cipherKeyValue'>) {
-        super(message);
-        this.firmwareRange = getFirmwareRange(this.name, null, this.firmwareRange);
-    }
-    get requiredPermissions(): MethodPermission[] {
-        return ['read', 'write'];
-    }
-
-    init() {
-        const { hasBundle, payload } = bundlify(this.payload);
-        this.hasBundle = hasBundle;
+        const { hasBundle, payload } = bundlify(message.payload);
 
         // validate bundle type
         Assert(Bundle(CipherKeyValueSchema), payload);
-        this.params = payload.bundle.map(batch => ({
+        const params = payload.bundle.map(batch => ({
             address_n: validatePath(batch.path),
             key: batch.key,
             value:
@@ -43,6 +34,13 @@ export default class CipherKeyValue extends AbstractMethod<
             ask_on_decrypt: batch.askOnDecrypt,
             iv: batch.iv instanceof Buffer ? batch.iv.toString('hex') : (batch.iv as string),
         }));
+
+        super(message, params);
+        this.hasBundle = hasBundle;
+        this.firmwareRange = getFirmwareRange(this.name, null, this.firmwareRange);
+    }
+    get requiredPermissions(): MethodPermission[] {
+        return ['read', 'write'];
     }
 
     get info() {
