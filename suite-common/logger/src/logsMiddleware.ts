@@ -11,7 +11,8 @@ import {
     setBaseCurrency,
 } from '@suite-common/wallet-core';
 import { getAccountIdentifier } from '@suite-common/wallet-utils';
-import { DEVICE, TRANSPORT } from '@trezor/connect';
+import { DEVICE } from '@trezor/connect';
+import { TRANSPORT } from '@trezor/transport';
 
 import { addLog } from './logsSlice';
 

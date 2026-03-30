@@ -1,5 +1,6 @@
 // original file https://github.com/trezor/connect/blob/develop/src/js/device/DeviceCommands.js
 
+import { DEVICE } from '@trezor/connect-common';
 import { ERRORS } from '@trezor/connect-common/src/constants';
 import { MessagesSchema as Messages } from '@trezor/protobuf';
 import { Assert } from '@trezor/schema-utils';
@@ -8,7 +9,6 @@ import { TRANSPORT } from '@trezor/transport';
 import { isErrorWithoutDeviceInteraction } from '@trezor/transport/src/errors-groups';
 import { scheduleAction } from '@trezor/utils';
 
-import { DEVICE } from '../events';
 import type { IDevice } from '../types/idevice';
 import type { TypedCallProvider } from '../types/typed-call-provider';
 import { initLog } from '../utils/debug';

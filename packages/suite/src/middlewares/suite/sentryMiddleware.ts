@@ -13,8 +13,9 @@ import {
     changeNetworks,
     setBaseCurrency,
 } from '@suite-common/wallet-core';
-import { DEVICE, TRANSPORT } from '@trezor/connect';
+import { DEVICE } from '@trezor/connect';
 import { getBootloaderVersion, getFirmwareVersion } from '@trezor/device-utils';
+import { TRANSPORT } from '@trezor/transport';
 
 import { DESKTOP_UPDATE, PROTOCOL, SUITE } from 'src/actions/suite/constants';
 import { type Action, type AppState, type Dispatch } from 'src/types/suite';

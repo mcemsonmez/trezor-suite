@@ -1,25 +1,27 @@
+import type {
+    BinaryInfo,
+    CommonParams,
+    CoreEventMessage,
+    DeviceUniquePath,
+    FirmwareUpdateFlowType,
+    FirmwareUpdateResponse,
+} from '@trezor/connect-common';
+import { FirmwareType, UI_REQUEST, UI_RESPONSE, createUiMessage } from '@trezor/connect-common';
 import { ERRORS } from '@trezor/connect-common/src/constants';
 import { getFirmwareOrBootloaderVersionArray } from '@trezor/device-utils';
+import { MessagesSchema as PROTO } from '@trezor/protobuf';
 import { resolveAfter } from '@trezor/utils';
 import { isEqual, isNewer } from '@trezor/utils/src/versionUtils';
 
-import {
-    getBinary,
-    parseFirmwareHeaders,
-    shouldStripFwHeaders,
-    stripFwHeaders,
-    uploadFirmware,
-} from '../api/firmware';
-import { PROTO } from '../constants';
+import { getBinary } from '../api/firmware/getBinary';
+import { shouldStripFwHeaders, stripFwHeaders } from '../api/firmware/modifyFirmware';
+import { parseFirmwareHeaders } from '../api/firmware/parseFirmwareHeaders';
+import { uploadFirmware } from '../api/firmware/uploadFirmware';
 import { DataManager } from '../data/DataManager';
 import { getFirmwareLocation, getReleaseByVersion } from '../data/firmwareInfo';
 import type { Device } from '../device/Device';
 import type { DeviceList } from '../device/DeviceList';
-import type { CoreEventMessage, UiPromiseCreator } from '../events';
-import { UI_REQUEST, UI_RESPONSE, createUiMessage } from '../events';
-import type { BinaryInfo, CommonParams, DeviceUniquePath, FirmwareUpdateFlowType } from '../types';
-import { FirmwareType } from '../types';
-import type { FirmwareUpdateResponse } from '../types/api/firmwareUpdate';
+import type { UiPromiseCreator } from '../events/ui-promise';
 import type { Log } from '../utils/debug';
 import { isFirmwareCacheUsedForSelectedSource } from '../utils/firmwareUtils';
 

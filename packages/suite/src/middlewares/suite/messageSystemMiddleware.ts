@@ -8,7 +8,8 @@ import {
 } from '@suite-common/message-system';
 import { createMiddleware } from '@suite-common/redux-utils';
 import { changeNetworks } from '@suite-common/wallet-core';
-import { DEVICE, TRANSPORT } from '@trezor/connect';
+import { DEVICE } from '@trezor/connect';
+import { TRANSPORT } from '@trezor/transport';
 
 import { SUITE } from 'src/actions/suite/constants';
 import { selectActiveTransports } from 'src/selectors/suite/suiteSelectors';

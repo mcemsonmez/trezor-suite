@@ -32,6 +32,7 @@
         "./src/utils/assets": "./src/utils/assets.native.ts",
         "./src/workers/workers": "./src/workers/workers.native.ts"
     },
+    "__publishConfig_TODO:": "Don't forget to update removed paths!",
     "publishConfig": {
         "main": "./lib/index.js",
         "module": "./libESM/index.mjs",

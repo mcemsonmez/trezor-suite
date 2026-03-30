@@ -1,11 +1,13 @@
 import { randomBytes } from 'crypto';
 
+import type { FirmwareHashCheckError, FirmwareHashCheckResult } from '@trezor/connect-common';
 import { serializeError } from '@trezor/utils';
 
-import { calculateFirmwareHash, getBinaryOptional, stripFwHeaders } from '../../api/firmware';
+import { calculateFirmwareHash } from '../../api/firmware/calculateFirmwareHash';
+import { getBinaryOptional } from '../../api/firmware/getBinary';
+import { stripFwHeaders } from '../../api/firmware/modifyFirmware';
 import { DataManager } from '../../data/DataManager';
 import { getFirmwareLocation, getReleaseByVersion } from '../../data/firmwareInfo';
-import type { FirmwareHashCheckError, FirmwareHashCheckResult } from '../../types';
 import type { IDevice } from '../../types/idevice';
 import type { Log } from '../../utils/debug';
 import { getFirmwareType } from '../../utils/firmwareUtils';

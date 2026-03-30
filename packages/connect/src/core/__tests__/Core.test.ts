@@ -1,5 +1,6 @@
+import { parseConnectSettings } from '@trezor/connect-common/src/data/connectSettings';
+
 import { DataManager } from '../../data/DataManager';
-import { parseConnectSettings } from '../../data/connectSettings';
 import type { ConnectSettings } from '../../types/settings';
 import { initCoreState } from '../index';
 

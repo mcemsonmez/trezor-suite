@@ -2,7 +2,8 @@ import { produce } from 'immer';
 
 import type { CountryCode } from '@suite-common/geolocation';
 import { type NetworkSymbol } from '@suite-common/wallet-config';
-import { TRANSPORT, type TransportInfo } from '@trezor/connect';
+import type { TransportInfo } from '@trezor/connect';
+import { TRANSPORT } from '@trezor/transport';
 
 import { STORAGE, SUITE } from 'src/actions/suite/constants';
 import { type Action, type TorBootstrap, TorStatus } from 'src/types/suite';

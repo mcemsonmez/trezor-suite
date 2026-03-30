@@ -1,27 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import EventEmitter from 'events';
 
-import { ERRORS } from '@trezor/connect-common/src/constants';
-import { TRANSPORT, TRANSPORT_ERROR } from '@trezor/transport';
-import { createDeferred, createLazy, getSynchronize, throwError } from '@trezor/utils';
-
-import type { AbstractMethod } from './AbstractMethod';
-import { getMethod } from './method';
-import { onCallFirmwareUpdate } from './onCallFirmwareUpdate';
-import { dispose as disposeBackend } from '../backend/BlockchainLink';
-import { DataManager } from '../data/DataManager';
-import { parseLocalFirmwares } from '../data/connectSettings';
-import { initializeFirmwareConfig } from '../data/firmwareInfo';
-import type { Device, DeviceEvents } from '../device/Device';
-import type { IDeviceList } from '../device/DeviceList';
-import { DeviceList, assertDeviceListConnected } from '../device/DeviceList';
-import * as workflows from '../device/workflow';
-import type {
-    CoreCallMessage,
-    CoreEventMessage,
-    CoreRequestMessage,
-    TransportInfo,
-} from '../events';
 import {
     CORE_CALL,
     CORE_EVENT,
@@ -34,8 +13,30 @@ import {
     createResponseMessage,
     createTransportMessage,
     createUiMessage,
-} from '../events';
-import type { ConnectSettings, DeviceIdentity } from '../types';
+} from '@trezor/connect-common';
+import type {
+    ConnectSettings,
+    CoreCallMessage,
+    CoreEventMessage,
+    CoreRequestMessage,
+    DeviceIdentity,
+    TransportInfo,
+} from '@trezor/connect-common';
+import { ERRORS } from '@trezor/connect-common/src/constants';
+import { parseLocalFirmwares } from '@trezor/connect-common/src/data/connectSettings';
+import { TRANSPORT, TRANSPORT_ERROR } from '@trezor/transport';
+import { createDeferred, createLazy, getSynchronize, throwError } from '@trezor/utils';
+
+import type { AbstractMethod } from './AbstractMethod';
+import { getMethod } from './method';
+import { onCallFirmwareUpdate } from './onCallFirmwareUpdate';
+import { dispose as disposeBackend } from '../backend/BlockchainLink';
+import { DataManager } from '../data/DataManager';
+import { initializeFirmwareConfig } from '../data/firmwareInfo';
+import type { Device, DeviceEvents } from '../device/Device';
+import type { IDeviceList } from '../device/DeviceList';
+import { DeviceList, assertDeviceListConnected } from '../device/DeviceList';
+import { validateState } from '../device/workflow/validateState';
 import type { LogWriter } from '../utils/debug';
 import { enableLog, initLog, setLogWriter } from '../utils/debug';
 import { createUiPromiseManager } from '../utils/uiPromiseManager';
@@ -132,7 +133,7 @@ const inner = async (context: CoreContext, method: AbstractMethod<any>, device: 
 
     // Make sure that device will display pin/passphrase
     if (method.useDeviceState) {
-        await workflows.validateState(workflowCtx);
+        await validateState(workflowCtx);
     }
 
     // run method

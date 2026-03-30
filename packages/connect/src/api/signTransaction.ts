@@ -1,38 +1,40 @@
 // origin: https://github.com/trezor/connect/blob/develop/src/js/core/methods/SignTransaction.js
 
+import type {
+    AccountAddresses,
+    BitcoinNetworkInfo,
+    PROTO,
+    RefTransaction,
+    TransactionOptions,
+} from '@trezor/connect-common';
 import { ERRORS } from '@trezor/connect-common/src/constants';
 import { BigNumber } from '@trezor/utils/src/bigNumber';
 import { promiseAllSequence } from '@trezor/utils/src/promiseAllSequence';
 
-import type { PROTO } from '../constants';
-import {
-    createPendingTransaction,
-    deriveOutputScript,
-    enhanceSignTx,
-    enhanceTrezorInputs,
-    getOrigTransactions,
-    getReferencedTransactions,
-    parseTransactionHexes,
-    requireReferencedTransactions,
-    signTx,
-    signTxLegacy,
-    transformOrigTransactions,
-    transformReferencedTransactions,
-    validateReferencedTransactions,
-    validateTrezorInputs,
-    validateTrezorOutputs,
-    verifyTx,
-} from './bitcoin';
 import type { Blockchain } from '../backend/BlockchainLink';
 import { initBlockchain, isBackendSupported } from '../backend/BlockchainLink';
 import type { MethodPermission } from '../core/AbstractMethod';
 import { AbstractMethod } from '../core/AbstractMethod';
-import type { AccountAddresses, BitcoinNetworkInfo } from '../types';
-import { getFirmwareRange, validateParams } from './common/paramsValidator';
 import { getBitcoinNetwork } from '../data/coinInfo';
-import type { RefTransaction, TransactionOptions } from '../types/api/bitcoin';
 import { getLabel } from '../utils/pathUtils';
+import { createPendingTransaction } from './bitcoin/createPendingTx';
+import { enhanceSignTx } from './bitcoin/enhanceSignTx';
+import { enhanceTrezorInputs, validateTrezorInputs } from './bitcoin/inputs';
+import { validateTrezorOutputs } from './bitcoin/outputs';
+import {
+    getOrigTransactions,
+    getReferencedTransactions,
+    parseTransactionHexes,
+    requireReferencedTransactions,
+    transformOrigTransactions,
+    transformReferencedTransactions,
+    validateReferencedTransactions,
+} from './bitcoin/refTx';
+import { signTx } from './bitcoin/signtx';
+import { signTxLegacy } from './bitcoin/signtxLegacy';
+import { deriveOutputScript, verifyTx } from './bitcoin/signtxVerify';
 import { getTransactionVbytes } from './bitcoin/transactionBytes';
+import { getFirmwareRange, validateParams } from './common/paramsValidator';
 
 type Params = {
     inputs: PROTO.TxInputType[];

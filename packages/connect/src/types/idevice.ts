@@ -1,13 +1,16 @@
-import type { FirmwareRelease, FirmwareType } from '@trezor/device-utils';
-import type { MessagesSchema as PROTO } from '@trezor/protobuf';
 import type {
-    DecodedTrezorPushNotification,
-    TransportProtocol,
-    thp as protocolThp,
-} from '@trezor/protocol';
-import type { Descriptor, Transport } from '@trezor/transport';
-import type { TypedEmitter, VersionArray } from '@trezor/utils';
-
+    DeviceButtonRequestPayload,
+    DeviceThpCredentialsChangedPayload,
+    DeviceThpPairingPayload,
+    DeviceThpPairingStatus,
+    DeviceVersionChanged,
+} from '@trezor/connect-common/src/events/device';
+import type {
+    UiResponsePassphrase,
+    UiResponsePin,
+    UiResponseThpPairingTag,
+    UiResponseWord,
+} from '@trezor/connect-common/src/types/api/uiResponse';
 import type {
     Device,
     DeviceBusyStatus,
@@ -18,23 +21,20 @@ import type {
     FirmwareHashCheckResult,
     KnownDevice,
     UnavailableCapabilities,
-} from './device';
-import type { FirmwareReleaseConfigInfo } from './firmware';
+} from '@trezor/connect-common/src/types/device';
+import type { FirmwareReleaseConfigInfo } from '@trezor/connect-common/src/types/firmware';
+import type { FirmwareRelease, FirmwareType } from '@trezor/device-utils';
+import type { MessagesSchema as PROTO } from '@trezor/protobuf';
+import type {
+    DecodedTrezorPushNotification,
+    TransportProtocol,
+    thp as protocolThp,
+} from '@trezor/protocol';
+import type { Descriptor, Transport } from '@trezor/transport';
+import type { TypedEmitter, VersionArray } from '@trezor/utils';
+
 import type { TypedCallProvider } from './typed-call-provider';
 import type { DeviceCommands } from '../device/DeviceCommands';
-import type {
-    DeviceButtonRequestPayload,
-    DeviceThpCredentialsChangedPayload,
-    DeviceThpPairingPayload,
-    DeviceThpPairingStatus,
-    DeviceVersionChanged,
-} from '../events/device';
-import type {
-    UiResponsePassphrase,
-    UiResponsePin,
-    UiResponseThpPairingTag,
-    UiResponseWord,
-} from '../events/ui-response';
 
 /**
  * Events emitted on the `device.lifecycle` emitter (separate from the main device TypedEmitter).

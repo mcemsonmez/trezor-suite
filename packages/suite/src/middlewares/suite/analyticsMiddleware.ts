@@ -18,7 +18,7 @@ import {
     getAccountTotalStakingBalance,
     getAccountsWithSomeTransactionHistory,
 } from '@suite-common/wallet-utils';
-import { DEVICE, TRANSPORT } from '@trezor/connect';
+import { DEVICE } from '@trezor/connect';
 import {
     getBootloaderHash,
     getBootloaderVersion,
@@ -28,6 +28,7 @@ import {
     hasBitcoinOnlyFirmware,
     isDeviceInBootloaderMode,
 } from '@trezor/device-utils';
+import { TRANSPORT } from '@trezor/transport';
 import { BigNumber } from '@trezor/utils';
 
 import { SUITE } from 'src/actions/suite/constants';

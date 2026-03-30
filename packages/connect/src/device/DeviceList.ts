@@ -1,5 +1,14 @@
 // original file https://github.com/trezor/connect/blob/develop/src/js/device/DeviceList.js
 
+import { DEVICE, asDeviceUniquePath } from '@trezor/connect-common';
+import type {
+    ConnectSettings,
+    DecodedTrezorPushNotification,
+    DeviceUniquePath,
+    StaticSessionId,
+    TransportError,
+    TransportInfo,
+} from '@trezor/connect-common';
 import { ERRORS } from '@trezor/connect-common/src/constants';
 import type { Transport } from '@trezor/transport';
 import { TRANSPORT } from '@trezor/transport';
@@ -14,13 +23,10 @@ import {
     typedObjectKeys,
 } from '@trezor/utils';
 
-import type { DecodedTrezorPushNotification, TransportError, TransportInfo } from '../events';
-import { DEVICE } from '../events';
 import { Device } from './Device';
-import type { ConnectSettings, DeviceUniquePath, StaticSessionId } from '../types';
-import { asDeviceUniquePath } from '../types';
 import { createTransportList } from './TransportList';
 import { TransportManager } from './TransportManager';
+import type { ConnectSettingsTransport } from '../types/settings';
 import { initLog } from '../utils/debug';
 import { trezorPushNotificationHandler } from './workflow/trezorPushNotification';
 
@@ -91,10 +97,9 @@ export const assertDeviceListConnected: (
 type ConstructorParams = Pick<ConnectSettings, 'priority' | 'debug' | 'manifest'> & {
     messages: Record<string, any>;
 };
-type InitParams = Pick<
-    ConnectSettings,
-    'transports' | 'pendingTransportEvent' | 'transportReconnect'
->;
+type InitParams = Pick<ConnectSettings, 'pendingTransportEvent' | 'transportReconnect'> & {
+    transports?: ConnectSettings['transports'];
+};
 
 export class DeviceList extends TypedEmitter<DeviceListEvents> implements IDeviceList {
     private readonly transportManagers: Partial<Record<TransportApiType, TransportManager>> = {};
@@ -239,8 +244,10 @@ export class DeviceList extends TypedEmitter<DeviceListEvents> implements IDevic
     }
 
     async init({ transports, transportReconnect, pendingTransportEvent }: InitParams = {}) {
+        const parsedTransports = transports as ConnectSettingsTransport[] | undefined;
+
         // throws when unknown transport is requested, in that case nothing is changed
-        this.transports = this.updateTransports(this.transports, transports);
+        this.transports = this.updateTransports(this.transports, parsedTransports);
 
         const promises = this.transports
             .map(t => t.apiType)

@@ -9,7 +9,7 @@ import {
 } from '@trezor/transport';
 import type { AbstractTransportParams } from '@trezor/transport/src/transports/abstract';
 
-import type { ConnectSettingsTransport } from '../types';
+import type { ConnectSettingsTransport } from '../types/settings';
 
 type Params = AbstractTransportParams & { sessionsBackgroundUrl?: string | null };
 
