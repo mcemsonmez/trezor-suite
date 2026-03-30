@@ -10753,8 +10753,6 @@ __metadata:
   dependencies:
     "@suite-common/http-client": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
-    "@suite-common/wallet-utils": "workspace:*"
-    "@trezor/utils": "workspace:*"
     orval: "npm:8.5.0"
     prettier: "npm:3.8.1"
     zod: "npm:4.3.6"
