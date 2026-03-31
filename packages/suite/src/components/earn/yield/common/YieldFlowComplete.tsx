@@ -100,7 +100,7 @@ export const YieldFlowComplete = ({ flowType, input, output, apy }: YieldFlowCom
                                     ...input.token,
                                     contractAddress: input.token.contractAddress ?? null,
                                 }}
-                                value={input.value}
+                                amount={input.amount}
                             />
                         </Column>
                         <Icon name="arrowRight" size={20} intent="neutral" priority="secondary" />
@@ -113,7 +113,7 @@ export const YieldFlowComplete = ({ flowType, input, output, apy }: YieldFlowCom
                                     ...output.token,
                                     contractAddress: output.token.contractAddress ?? null,
                                 }}
-                                value={output.value}
+                                amount={output.amount}
                             />
                         </Column>
                     </Row>

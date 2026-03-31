@@ -5,6 +5,8 @@ const evmHexString = z
     .startsWith('0x')
     .transform(s => s as `0x${string}`);
 
+const evmNumberLike = z.union([z.number(), evmHexString]);
+
 export const UnsignedEvmTransactionSchema = z.object({
     from: evmHexString,
     to: evmHexString,
@@ -14,6 +16,20 @@ export const UnsignedEvmTransactionSchema = z.object({
 
 export type UnsignedEvmTransaction = z.infer<typeof UnsignedEvmTransactionSchema>;
 
+export const UnsignedEvmTransactionForSigningSchema = UnsignedEvmTransactionSchema.extend({
+    gasLimit: evmHexString,
+    nonce: evmNumberLike,
+    type: z.number().optional(),
+    value: evmHexString.optional(),
+    gasPrice: evmHexString.optional(),
+    maxFeePerGas: evmHexString.optional(),
+    maxPriorityFeePerGas: evmHexString.optional(),
+});
+
+export type UnsignedEvmTransactionForSigning = z.infer<
+    typeof UnsignedEvmTransactionForSigningSchema
+>;
+
 export const parseUnsignedEvmTransaction = (raw: unknown): UnsignedEvmTransaction | null => {
     if (typeof raw !== 'string') {
         return null;
@@ -21,6 +37,22 @@ export const parseUnsignedEvmTransaction = (raw: unknown): UnsignedEvmTransactio
 
     try {
         const result = UnsignedEvmTransactionSchema.safeParse(JSON.parse(raw));
+
+        return result.success ? result.data : null;
+    } catch {
+        return null;
+    }
+};
+
+export const parseUnsignedEvmTransactionForSigning = (
+    raw: unknown,
+): UnsignedEvmTransactionForSigning | null => {
+    if (typeof raw !== 'string') {
+        return null;
+    }
+
+    try {
+        const result = UnsignedEvmTransactionForSigningSchema.safeParse(JSON.parse(raw));
 
         return result.success ? result.data : null;
     } catch {

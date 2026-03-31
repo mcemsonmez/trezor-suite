@@ -1,3 +1,5 @@
+import type { CryptoId } from 'invity-api';
+
 import type { NetworkSymbol } from '@suite-common/wallet-config';
 
 export const YIELD_FLOW_TYPES = ['supply', 'withdraw'] as const;
@@ -26,5 +28,22 @@ export type YieldFlowToken = YieldFlowDisplayToken & {
 
 export type YieldFlowCompleteValue = {
     token: YieldFlowDisplayToken;
-    value: string;
+    amount: string;
+};
+
+export type YieldApproveModalState = {
+    amount: string;
+    cryptoId: CryptoId;
+    spender: string;
+    providerId?: string;
+    transactionKind: Extract<
+        YieldPendingTransactionState['kind'],
+        'approve' | 'revoke' | 'revoke-only'
+    >;
+};
+
+export type YieldPendingTransactionState = {
+    kind: 'approve' | 'revoke' | 'revoke-only' | 'supply' | 'withdraw';
+    txid: string;
+    amount: string;
 };

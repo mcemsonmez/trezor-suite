@@ -1,6 +1,10 @@
+import { selectLanguage } from '@suite/settings';
 import { type NetworkSymbol, getCoingeckoId } from '@suite-common/wallet-config';
+import { localizeNumber } from '@suite-common/wallet-utils';
 import { Row, Text } from '@trezor/components';
 import { AssetLogo, CoinLogo } from '@trezor/product-components';
+
+import { useSelector } from 'src/hooks/suite';
 
 type YieldTokenValueToken = {
     coingeckoId?: string;
@@ -11,10 +15,11 @@ type YieldTokenValueToken = {
 
 type YieldTokenValueProps = {
     token: YieldTokenValueToken;
-    value: string;
+    amount: string;
 };
 
-export const YieldTokenValue = ({ token, value }: YieldTokenValueProps) => {
+export const YieldTokenValue = ({ token, amount }: YieldTokenValueProps) => {
+    const locale = useSelector(selectLanguage);
     const assetLogo =
         token.contractAddress || token.coingeckoId
             ? {
@@ -38,7 +43,9 @@ export const YieldTokenValue = ({ token, value }: YieldTokenValueProps) => {
             ) : (
                 <CoinLogo size={24} symbol={token.networkSymbol} type="tokenWithNetwork" />
             )}
-            <Text typographyStyle="body-md-strong">{value}</Text>
+            <Text typographyStyle="body-md-strong">
+                {localizeNumber(amount, locale)} {token.symbol}
+            </Text>
         </Row>
     );
 };
