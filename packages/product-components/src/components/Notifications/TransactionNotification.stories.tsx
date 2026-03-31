@@ -136,6 +136,28 @@ const transactionNotificationConfig: Record<
             },
         },
     },
+    'tx-yield-supply': {
+        toastIcon: 'arrowUp',
+        intent: 'brand',
+        message: 'Supplied from Base #1',
+        amount: '150 USDC',
+        transaction: {
+            notificationType: 'tx-yield-supply',
+            symbol: 'base',
+            accountSymbol: 'base',
+        },
+    },
+    'tx-yield-withdraw': {
+        toastIcon: 'arrowUp',
+        intent: 'brand',
+        message: 'Withdrawn from Base #1',
+        amount: '150 USDC',
+        transaction: {
+            notificationType: 'tx-yield-withdraw',
+            symbol: 'base',
+            accountSymbol: 'base',
+        },
+    },
 };
 
 export const Default: Story = {
@@ -162,16 +184,7 @@ export const InToast: StoryObj<TransactionToastStoryArgs> = {
             control: {
                 type: 'select',
             },
-            options: [
-                'tx-sent',
-                'tx-received',
-                'tx-revoked',
-                'tx-claimed',
-                'tx-unstaked',
-                'tx-staked',
-                'tx-approved',
-                'tx-confirmed',
-            ],
+            options: Object.keys(transactionNotificationConfig) as TransactionNotificationType[],
         },
     },
     render: ({ notificationType }) => {
