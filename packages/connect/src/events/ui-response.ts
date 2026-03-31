@@ -58,6 +58,7 @@ export interface UiResponseThpPairingTag {
         | {
               selectedMethod: ThpPairingMethod | keyof typeof ThpPairingMethod;
           };
+    requestId?: string;
 }
 export interface UiResponseAccount {
     type: typeof UI_RESPONSE.RECEIVE_ACCOUNT;
