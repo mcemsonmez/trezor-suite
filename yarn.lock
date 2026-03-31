@@ -14421,6 +14421,7 @@ __metadata:
     "@suite-common/dependency-injection": "workspace:*"
     "@suite-common/device": "workspace:*"
     "@suite-common/metadata-types": "workspace:*"
+    "@suite-common/redux-utils": "workspace:*"
     "@suite-common/suite-sync": "workspace:*"
     "@suite-common/suite-sync-storage": "workspace:*"
     "@suite-common/suite-sync-types": "workspace:*"
@@ -14437,6 +14438,7 @@ __metadata:
     "@trezor/utils": "workspace:*"
     react: "npm:19.2.4"
     react-redux: "npm:9.2.0"
+    redux-thunk: "npm:^3.1.0"
   languageName: unknown
   linkType: soft
 

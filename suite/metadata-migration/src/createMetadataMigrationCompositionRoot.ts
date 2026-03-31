@@ -1,11 +1,10 @@
-import { isTrezorDeviceWithState } from '@suite-common/device';
 import {
     type UpdateAccountLabelDep,
     type UpdateAddressLabelDep,
     type UpdateOutputLabelDep,
     type UpdateWalletLabelDep,
 } from '@suite-common/suite-sync-types';
-import type { TrezorDevice, TrezorDeviceWithState } from '@suite-common/suite-types';
+import type { TrezorDevice } from '@suite-common/suite-types';
 
 import { createMigrateAccountLabels } from './entities/createMigrateAccountLabels';
 import { createMigrateAddressLabels } from './entities/createMigrateAddressLabels';
@@ -23,6 +22,7 @@ import {
     type MigrateLegacyLabelsToSuiteSync,
     createMigrateLegacyLabelsToSuiteSync,
 } from './migrateLegacyLabelsToSuiteSync';
+import { getConnectedMigratableDevices } from './migrationUtils';
 
 export type MetadataMigrationDep = {
     migrateLegacyLabelsToSuiteSync: MigrateLegacyLabelsToSuiteSync;
@@ -45,14 +45,7 @@ type CreateMetadataMigrationCompositionRootDeps = {
 export const createMetadataMigrationCompositionRoot = (
     deps: CreateMetadataMigrationCompositionRootDeps,
 ): MetadataMigrationDep => {
-    const getMigratableDevices: GetDevices = () =>
-        deps.getDevices().reduce<TrezorDeviceWithState[]>((devices, device) => {
-            if (isTrezorDeviceWithState(device) && device.connected && device.available) {
-                devices.push(device);
-            }
-
-            return devices;
-        }, []);
+    const getMigratableDevices: GetDevices = () => getConnectedMigratableDevices(deps.getDevices());
 
     const migrateWalletLabels = createMigrateWalletLabels({
         getLegacyWalletLabels: deps.getLegacyWalletLabels,

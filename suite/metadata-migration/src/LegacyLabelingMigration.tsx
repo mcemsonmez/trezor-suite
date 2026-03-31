@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
 import { Translation } from '@suite/intl';
-import { isTrezorDeviceWithState } from '@suite-common/device';
 import { type AnyAction } from '@suite-common/redux-utils';
-import { type TrezorDevice, type TrezorDeviceWithState } from '@suite-common/suite-types';
+import { type TrezorDevice } from '@suite-common/suite-types';
 import { Tooltip } from '@trezor/components';
 import { type StaticSessionId } from '@trezor/connect';
 import { ActionButton, ActionColumn, TextColumn } from '@trezor/product-components';
@@ -11,17 +10,7 @@ import { ActionButton, ActionColumn, TextColumn } from '@trezor/product-componen
 import { LegacyLabelingMigrationModal } from './LegacyLabelingMigrationModal';
 import type { MigrationError } from './legacyLabelsMigration';
 import type { MigrateLegacyLabelsToSuiteSync } from './migrateLegacyLabelsToSuiteSync';
-
-const getConnectedMigratableDevices = (
-    devices: TrezorDevice[] | undefined,
-): TrezorDeviceWithState[] =>
-    devices?.reduce<TrezorDeviceWithState[]>((result, device) => {
-        if (isTrezorDeviceWithState(device) && device.connected && device.available) {
-            result.push(device);
-        }
-
-        return result;
-    }, []) ?? [];
+import { getConnectedMigratableDevices } from './migrationUtils';
 
 export type LegacyLabelingMigrationProps = {
     devices: TrezorDevice[] | undefined;
