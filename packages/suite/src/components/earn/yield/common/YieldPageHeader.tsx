@@ -1,12 +1,13 @@
 import { Translation } from '@suite/intl';
 import { openModal } from '@suite/modal';
-import { goto } from '@suite/router';
+import { type EarnParams, goto } from '@suite/router';
 import {
     type EarnAnalyticsStep,
     EarnFlow,
     EarnProvider,
 } from '@suite-common/suite-types/src/staking';
 import { getCoingeckoId } from '@suite-common/wallet-config';
+import { type Account } from '@suite-common/wallet-types';
 import { Box, Button, Column, IconButton, Row, Text } from '@trezor/components';
 import { AssetLogo, CoinLogo } from '@trezor/product-components';
 
@@ -15,15 +16,15 @@ import { PageHeader } from 'src/components/suite/layouts/SuiteLayout';
 import { useDispatch } from 'src/hooks/suite';
 
 import { useAllYieldOpportunities } from '../../dashboard/yield/hooks/useAllYieldOpportunities';
-import { useEarnRouteAccount } from '../../utils/useEarnRouteAccount';
 
 interface YieldPageHeaderProps {
     analyticsStep: Extract<EarnAnalyticsStep, 'yield-supply' | 'yield-withdraw'>;
+    account?: Account;
+    routeParams?: EarnParams;
 }
 
-export const YieldPageHeader = ({ analyticsStep }: YieldPageHeaderProps) => {
+export const YieldPageHeader = ({ analyticsStep, account, routeParams }: YieldPageHeaderProps) => {
     const dispatch = useDispatch();
-    const { account, routeParams } = useEarnRouteAccount();
     const { yieldOpportunities } = useAllYieldOpportunities();
     const vault = routeParams
         ? yieldOpportunities.find(opportunity => opportunity.id === routeParams.yieldId)
