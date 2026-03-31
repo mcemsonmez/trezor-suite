@@ -1,67 +1,38 @@
-import { useState } from 'react';
-
-import { Translation } from '@suite/intl';
+import { LegacyLabelingMigration as MetadataMigrationLegacyLabelingMigration } from '@suite/metadata-migration';
 import { SettingsAnchor } from '@suite/router';
-import { isTrezorDeviceWithState, selectDevices } from '@suite-common/device';
+import { selectDevices } from '@suite-common/device';
 import { selectIsSuiteSyncEnabled } from '@suite-common/suite-sync';
-import type { TrezorDeviceWithState } from '@suite-common/suite-types';
-import { Tooltip } from '@trezor/components';
-import { ActionButton, ActionColumn, TextColumn } from '@trezor/product-components';
+import { notificationsActions } from '@suite-common/toast-notifications';
 
 import { SettingsSectionItem } from 'src/components/settings/SettingsSectionItem';
-import { useSelector } from 'src/hooks/suite';
-
-import { LegacyLabelingMigrationModal } from './LegacyLabelingMigrationModal';
-
-const isConnectedMigratableDevice = (
-    device: ReturnType<typeof selectDevices>[number],
-): device is TrezorDeviceWithState =>
-    isTrezorDeviceWithState(device) && device.connected && device.available;
+import { suiteSyncErrorHandler } from 'src/components/suite/labeling/suiteSyncErrorHandler';
+import { useDispatch, useSelector } from 'src/hooks/suite';
+import { useSuiteServices } from 'src/support/SuiteServicesProvider';
 
 export const LegacyLabelingMigration = () => {
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const isSuiteSyncEnabled = useSelector(selectIsSuiteSyncEnabled);
+    const dispatch = useDispatch();
     const devices = useSelector(selectDevices);
-
-    const hasConnectedMigratableDevice = devices?.some(isConnectedMigratableDevice) ?? false;
+    const isSuiteSyncEnabled = useSelector(selectIsSuiteSyncEnabled);
+    const { migrateLegacyLabelsToSuiteSync } = useSuiteServices();
 
     if (!isSuiteSyncEnabled) {
         return null;
     }
 
     return (
-        <>
-            {isModalVisible && (
-                <LegacyLabelingMigrationModal
-                    onCancel={() => setIsModalVisible(false)}
-                    onFinish={() => setIsModalVisible(false)}
-                />
-            )}
-
-            <SettingsSectionItem anchorId={SettingsAnchor.LabelingMigration}>
-                <TextColumn
-                    title={<Translation id="TR_LABELING_MIGRATION_TITLE" />}
-                    description={<Translation id="TR_LABELING_MIGRATION_DESCRIPTION" />}
-                />
-                <ActionColumn>
-                    <Tooltip
-                        content={
-                            hasConnectedMigratableDevice ? undefined : (
-                                <Translation id="TR_DEVICE_NOT_CONNECTED" />
-                            )
-                        }
-                    >
-                        <ActionButton
-                            intent="brand"
-                            onClick={() => setIsModalVisible(true)}
-                            isDisabled={!hasConnectedMigratableDevice}
-                            data-testid="@settings/metadata/migrate-button"
-                        >
-                            <Translation id="TR_MIGRATE" />
-                        </ActionButton>
-                    </Tooltip>
-                </ActionColumn>
-            </SettingsSectionItem>
-        </>
+        <SettingsSectionItem anchorId={SettingsAnchor.LabelingMigration}>
+            <MetadataMigrationLegacyLabelingMigration
+                devices={devices}
+                addToast={notificationsActions.addToast}
+                migrateLegacyLabelsToSuiteSync={migrateLegacyLabelsToSuiteSync}
+                onSuiteSyncError={({ error, deviceStaticSessionId }) =>
+                    suiteSyncErrorHandler({
+                        error,
+                        dispatch,
+                        deviceStaticSessionId,
+                    })
+                }
+            />
+        </SettingsSectionItem>
     );
 };

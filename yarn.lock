@@ -14428,9 +14428,15 @@ __metadata:
     "@suite-common/wallet-config": "workspace:*"
     "@suite-common/wallet-types": "workspace:*"
     "@suite-common/wallet-utils": "workspace:*"
+    "@suite/intl": "workspace:*"
+    "@suite/metadata": "workspace:*"
+    "@trezor/components": "workspace:*"
     "@trezor/connect": "workspace:*"
+    "@trezor/product-components": "workspace:*"
     "@trezor/type-utils": "workspace:*"
     "@trezor/utils": "workspace:*"
+    react: "npm:19.2.4"
+    react-redux: "npm:9.2.0"
   languageName: unknown
   linkType: soft
 

@@ -1,41 +1,55 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import type { ThunkDispatch } from 'redux-thunk';
 
 import { Translation } from '@suite/intl';
 import {
     MetadataProviderSelectionModal,
+    type MetadataRootState,
     connectProvider,
     metadataLabelingActions,
     metadataThunks,
 } from '@suite/metadata';
-import { isTrezorDeviceWithState, selectDevices } from '@suite-common/device';
 import { type MetadataProviderType } from '@suite-common/metadata-types';
-import type { TrezorDevice, TrezorDeviceWithState } from '@suite-common/suite-types';
-import { notificationsActions } from '@suite-common/toast-notifications';
+import { type AnyAction, type ExtraDependencies } from '@suite-common/redux-utils';
+import { type TrezorDeviceWithState } from '@suite-common/suite-types';
+import { type StaticSessionId } from '@trezor/connect';
 
-import { suiteSyncErrorHandler } from 'src/components/suite/labeling/suiteSyncErrorHandler';
-import { useDispatch, useSelector } from 'src/hooks/suite';
-import { useSuiteServices } from 'src/support/SuiteServicesProvider';
-
-const isConnectedMigratableDevice = (
-    device: TrezorDevice | undefined,
-): device is TrezorDeviceWithState =>
-    isTrezorDeviceWithState(device) && device.connected && device.available;
+import type { MigrationError } from './legacyLabelsMigration';
+import type { MigrateLegacyLabelsToSuiteSync } from './migrateLegacyLabelsToSuiteSync';
 
 type LegacyLabelingMigrationModalProps = {
     onCancel: () => void;
     onFinish: () => void;
+    migratableDevices: TrezorDeviceWithState[];
+    migrateLegacyLabelsToSuiteSync: MigrateLegacyLabelsToSuiteSync;
+    addToast: (_: {
+        type: 'legacy-labeling-migration-success';
+        added: number;
+        skipped: number;
+    }) => AnyAction;
+    onSuiteSyncError: (params: {
+        error: MigrationError['cause'];
+        deviceStaticSessionId: StaticSessionId;
+    }) => void;
 };
+
+type MetadataDispatch = ThunkDispatch<MetadataRootState, ExtraDependencies, AnyAction>;
 
 export const LegacyLabelingMigrationModal = ({
     onCancel,
     onFinish,
+    migratableDevices,
+    migrateLegacyLabelsToSuiteSync,
+    addToast,
+    onSuiteSyncError,
 }: LegacyLabelingMigrationModalProps) => {
-    const dispatch = useDispatch();
-    const { migrateLegacyLabelsToSuiteSync } = useSuiteServices();
+    const dispatch = useDispatch<MetadataDispatch>();
     const [providerLoading, setProviderLoading] = useState<MetadataProviderType | null>(null);
     const [error, setError] = useState('');
-    const devices = useSelector(selectDevices);
-    const hasConnectedMigratableDevice = devices?.some(isConnectedMigratableDevice) ?? false;
+
+    const hasConnectedMigratableDevice = migratableDevices.length > 0;
 
     const handleMigrate = async (providerType: MetadataProviderType) => {
         if (!hasConnectedMigratableDevice) {
@@ -69,12 +83,10 @@ export const LegacyLabelingMigrationModal = ({
             return;
         }
 
-        const migratableDevices = devices?.filter(isConnectedMigratableDevice) ?? [];
-
         for (const device of migratableDevices) {
-            const deviceState = device.state.staticSessionId;
-
-            const initialized = await dispatch(metadataLabelingActions.init(true, deviceState));
+            const initialized = await dispatch(
+                metadataLabelingActions.init(true, device.state.staticSessionId),
+            );
 
             if (!initialized) {
                 setError('Migration failed. Try again.');
@@ -88,29 +100,27 @@ export const LegacyLabelingMigrationModal = ({
 
         if (result.success) {
             dispatch(
-                notificationsActions.addToast({
+                addToast({
                     type: 'legacy-labeling-migration-success',
                     added: result.payload.changed,
                     skipped: result.payload.skipped,
                 }),
             );
-
-            onFinish();
-            setProviderLoading(null);
-
-            return;
         } else {
-            suiteSyncErrorHandler({
+            onSuiteSyncError({
                 error: result.error.cause,
-                dispatch,
                 deviceStaticSessionId: result.error.deviceStaticSessionId,
             });
 
             setError('Migration failed. Try again.');
         }
 
-        await dispatch(metadataThunks.disableMetadata());
+        dispatch(metadataThunks.disableMetadata());
         setProviderLoading(null);
+
+        if (result.success) {
+            onFinish();
+        }
     };
 
     return (
