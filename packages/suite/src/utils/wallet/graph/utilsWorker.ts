@@ -1,7 +1,7 @@
 import { fromUnixTime, getUnixTime, startOfMonth } from 'date-fns';
 
 import { BASE_CURRENCY_ZERO, toFiatCurrency } from '@suite-common/wallet-utils';
-import type { FiatRatesBySymbol, StaticSessionId } from '@trezor/connect';
+import type { FiatRatesBySymbol } from '@trezor/connect';
 import { BigNumber, typedObjectFromEntries, typedObjectKeys } from '@trezor/utils';
 
 import {
@@ -11,9 +11,7 @@ import {
 } from 'src/types/wallet/graph';
 
 import { type FiatValueMap, type GraphDataPoint, type TypeName } from './types';
-import { getGraphDataForInterval } from './utils';
 import { sumFiatValueMapInPlace } from './utilsShared';
-import type { State as GraphState } from '../../../reducers/wallet/graphReducer';
 
 const calcFiatValueMap = (amount: string, rates: FiatRatesBySymbol): FiatValueMap =>
     typedObjectFromEntries(
@@ -121,26 +119,3 @@ export const aggregateBalanceHistory = <TType extends TypeName>(
 
     return aggregatedData;
 };
-
-type PrepareGraphDataAsyncProps = {
-    graph: GraphState;
-    deviceState: StaticSessionId | undefined;
-};
-
-/**
- * Poor man's substitute for web worker, but it does the job perfectly - does expensive calculations async without
- * lagging the renderer thread.
- */
-export const prepareGraphDataAsync = ({
-    graph,
-    deviceState,
-}: PrepareGraphDataAsyncProps): Promise<GraphDataPoint<'dashboard'>[]> =>
-    new Promise(resolve => {
-        window.setTimeout(() => {
-            const history = getGraphDataForInterval({ deviceState, graph });
-            const { groupBy } = graph.selectedRange;
-            const type = 'dashboard';
-            const aggregatedData = aggregateBalanceHistory(history, groupBy, type);
-            resolve(aggregatedData);
-        }, 0);
-    });

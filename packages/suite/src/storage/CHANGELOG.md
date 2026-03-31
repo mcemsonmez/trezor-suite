@@ -1,5 +1,9 @@
 # Storage changelog
 
+## 26.5.0
+
+- create `graphFiatRates` object store for persisted graph fiat history caches
+
 ## 26.4.0
 
 - create `phishing` object store for persisting user "marked as not scam" transaction IDs per account

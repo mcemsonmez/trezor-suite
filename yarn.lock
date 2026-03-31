@@ -16057,6 +16057,7 @@ __metadata:
     jest-canvas-mock: "npm:^2.5.2"
     jest-mock: "npm:^29.7.0"
     jest-watch-typeahead: "npm:3.0.1"
+    liveline: "npm:^0.0.7"
     pako: "npm:^2.1.0"
     pdfmake: "npm:^0.3.3"
     polished: "npm:^4.3.1"
@@ -32163,6 +32164,15 @@ __metadata:
     listen: bin/listhen.mjs
     listhen: bin/listhen.mjs
   checksum: 10/72b869c8604301352c5d5825a7737705f0df2ce1795af8e779b6f956ba71302e13b12b2d35142687fb4e1e8ccc2747e2be3c9cbf20f7f96b73f897881aa3c384
+  languageName: node
+  linkType: hard
+
+"liveline@npm:^0.0.7":
+  version: 0.0.7
+  resolution: "liveline@npm:0.0.7"
+  peerDependencies:
+    react: ">=18"
+  checksum: 10/295bb9913e9af40282a549a4dbbb2c7a8188deb1cf76db3ae3562a55dd32be93811276d6874f460849a4810027ec15368c0aa748e43f0f8081830fdaf688e774
   languageName: node
   linkType: hard
 

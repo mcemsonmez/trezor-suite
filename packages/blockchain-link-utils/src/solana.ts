@@ -758,6 +758,7 @@ export const transformTransaction = (
                       amount: stakeAmount,
                   }
                 : undefined,
+            postBalance: extractAccountBalanceDiff(tx, accountAddress)?.postBalance.toFixed(0),
         },
     };
 };

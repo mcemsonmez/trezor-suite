@@ -1,14 +1,12 @@
-import { useCallback } from 'react';
+import { type ReactNode, useEffect, useRef } from 'react';
 
 import { selectAllAccountsToList } from '@suite-common/wallet-core';
 import { SkeletonRectangle } from '@trezor/components';
 
 import { updateGraphData } from 'src/actions/wallet/graphActions';
-import { GraphRangeSelector } from 'src/components/suite';
 import { FiatHeader } from 'src/components/wallet/FiatHeader';
-import { useSelector } from 'src/hooks/suite';
+import { useDispatch, useGraph, useSelector } from 'src/hooks/suite';
 import { type Discovery } from 'src/types/wallet';
-import { type GraphRange } from 'src/types/wallet/graph';
 
 import { ContentFlex, useIsContentBelowBreakpoint } from '../../../support/suite/ContentFlex';
 
@@ -16,44 +14,44 @@ export type PortfolioCardHeaderProps = {
     discovery?: Discovery;
     fiatAmount: string;
     localCurrency: string;
-    isWalletLoading: boolean;
-    isWalletError: boolean;
     isDiscoveryRunning?: boolean;
-    showGraphControls: boolean;
-    passphraseEntryCanceled: boolean;
+    rightContent?: ReactNode;
 };
 
 export const PortfolioCardHeader = ({
     discovery,
     fiatAmount,
     localCurrency,
-    isWalletLoading,
-    isWalletError,
     isDiscoveryRunning,
-    showGraphControls,
-    passphraseEntryCanceled,
+    rightContent,
 }: PortfolioCardHeaderProps) => {
     const accounts = useSelector(selectAllAccountsToList);
+    const dispatch = useDispatch();
+    const { selectedRange } = useGraph();
     const isContentBelowBreakpoint = useIsContentBelowBreakpoint();
+    const previousSelectedRangeKeyRef = useRef<string | null>(null);
 
-    const onSelectedRange = useCallback(
-        (_range: GraphRange) => {
-            updateGraphData({ accounts });
-        },
-        [accounts],
-    );
+    useEffect(() => {
+        const selectedRangeKey = `${selectedRange.label}:${selectedRange.startDate?.getTime() ?? 'null'}:${selectedRange.endDate?.getTime() ?? 'null'}`;
 
-    let actions = null;
-    if (!isWalletLoading && !isWalletError && !passphraseEntryCanceled) {
-        if (showGraphControls) {
-            actions = (
-                <GraphRangeSelector
-                    onSelectedRange={onSelectedRange}
-                    placement={{ position: 'bottom', alignment: 'start' }}
-                />
-            );
+        if (previousSelectedRangeKeyRef.current === null) {
+            previousSelectedRangeKeyRef.current = selectedRangeKey;
+
+            return;
         }
-    }
+
+        if (previousSelectedRangeKeyRef.current === selectedRangeKey) {
+            return;
+        }
+
+        previousSelectedRangeKeyRef.current = selectedRangeKey;
+        dispatch(
+            updateGraphData({
+                accounts,
+                selectedRange,
+            }),
+        );
+    }, [accounts, dispatch, selectedRange]);
 
     const valueLoading = isDiscoveryRunning || (!discovery && isNaN(Number(fiatAmount)));
 
@@ -74,7 +72,7 @@ export const PortfolioCardHeader = ({
                     localCurrency={localCurrency}
                 />
             )}
-            {actions}
+            {rightContent}
         </ContentFlex>
     );
 };
