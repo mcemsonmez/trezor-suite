@@ -491,7 +491,9 @@ export const Address = ({ output, outputId, outputsCount }: AddressProps) => {
 
                                     return Promise.resolve(true);
                                 }}
-                            />
+                            >
+                                {label}
+                            </Labeling>
                         </Text>
                     )}
                     {outputsCount > 1 && (
