@@ -43,8 +43,11 @@ test.describe('Import a BTC csv file', { tag: ['@webOnly', '@T3W1', '@T3T1'] }, 
             await expect(page.getByTestId('outputs.0.amount')).toBeVisible();
             await expect(page.getByTestId('outputs.0.amount')).toHaveValue(convertedData[0].amount);
             await expect(page.getByTestId('outputs.0.fiat')).toBeVisible();
-            // TODO: Uncomment this when https://github.com/trezor/trezor-suite/issues/19146 is fixed
-            //await expect(page.getByTestId('outputs.0.fiat')).toHaveValue(/^\d+(\.\d+)?$/);
+            await expect(page.getByTestId('outputs.0.fiat')).toHaveValue(/^[\d,]+(\.\d+)?$/);
+            await expect(page.getByTestId('@metadata/input').nth(1)).toBeVisible();
+            await expect(page.getByTestId('@metadata/input').nth(1)).toHaveValue(
+                convertedData[0].label,
+            );
 
             await expect(page.getByTestId('outputs.1.address')).toBeVisible();
             await expect(page.getByTestId('outputs.1.address')).toHaveValue(
@@ -54,6 +57,10 @@ test.describe('Import a BTC csv file', { tag: ['@webOnly', '@T3W1', '@T3T1'] }, 
             await expect(page.getByTestId('outputs.1.amount')).toHaveValue(/^\d+(\.\d+)?$/);
             await expect(page.getByTestId('outputs.1.fiat')).toBeVisible();
             await expect(page.getByTestId('outputs.1.fiat')).toHaveValue(convertedData[1].amount);
+            await expect(page.getByTestId('@metadata/input').nth(2)).toBeVisible();
+            await expect(page.getByTestId('@metadata/input').nth(2)).toHaveValue(
+                convertedData[1].label,
+            );
         },
     );
 });
