@@ -1,5 +1,5 @@
 import { ERRORS } from '@trezor/connect-common/src/constants';
-import type { Capability } from '@trezor/protobuf/src/messages';
+import type { Capability } from '@trezor/protobuf/src/definitions';
 import { versionUtils } from '@trezor/utils';
 
 import type { Device } from '../device/Device';

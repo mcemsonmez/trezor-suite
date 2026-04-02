@@ -1,5 +1,5 @@
 import { DeviceModelInternal } from '@trezor/device-utils';
-import type { FirmwareHash } from '@trezor/protobuf/src/messages';
+import type { FirmwareHash } from '@trezor/protobuf/src/definitions';
 import type { Descriptor } from '@trezor/transport';
 import { Log } from '@trezor/utils';
 
