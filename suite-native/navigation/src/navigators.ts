@@ -385,6 +385,7 @@ export type RootStackParamList = {
     [RootStackRoutes.AccountDetail]: AccountDetailParams;
     [RootStackRoutes.StakingDetail]: { accountKey: AccountKey };
     [RootStackRoutes.StakingManagement]: { accountKey: AccountKey };
+    [RootStackRoutes.StakingInsufficientBalance]: { accountKey: AccountKey };
     [RootStackRoutes.HowStakeWorksScreen]: {
         accountKey?: AccountKey;
         symbol: NetworkSymbol;
