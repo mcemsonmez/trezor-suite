@@ -15,7 +15,7 @@ export const earnHttpClient = createHttpClient({
 });
 
 export const getStakingBatch = earnHttpClient('/staking', {
-    method: 'POST',
+    method: 'GET',
     schema: stakingBatchResponse,
 });
 

@@ -14,6 +14,11 @@ test.describe('ETH staking', { tag: ['@T3W1', '@T3T1'] }, () => {
     });
     test.beforeEach(
         async ({ page, dashboardPage, onboardingPage, settingsPage, blockbookMock }) => {
+            await page.route('**/staking/eth/validators-queue**', async route => {
+                await route.fulfill({
+                    json: { activatedAt: 0, addingDelay: 0 },
+                });
+            });
             await onboardingPage.completeOnboarding();
             await settingsPage.navigateTo('coins');
             await blockbookMock.start('eth');
@@ -216,6 +221,7 @@ test.describe('ETH staking', { tag: ['@T3W1', '@T3T1'] }, () => {
             });
 
             await test.step('Verify banner about instant staking', async () => {
+                await page.clock.runFor(100);
                 await expect(stakingSection.instantBannerHeader).toHaveTranslation(
                     'TR_EARN_AMOUNT_STAKED_INSTANTLY',
                     {

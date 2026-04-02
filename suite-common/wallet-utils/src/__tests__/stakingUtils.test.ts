@@ -4,10 +4,9 @@ import { getUnstakingPeriodInDays } from '../stakingUtils';
 describe('getUnstakingPeriodInDays', () => {
     getUnstakingPeriodInDaysFixture.forEach(test => {
         it(test.description, () => {
-            const result = getUnstakingPeriodInDays({
-                networkType: test.args.networkType,
-                validatorWithdrawTime: test.args.validatorWithdrawTime,
-                validatorExitTime: test.args.validatorExitTime,
+            const result = getUnstakingPeriodInDays(test.args.networkType, {
+                withdrewAt: test.args.withdrewAt,
+                exitedAt: test.args.exitedAt,
             });
             expect(result).toEqual(test.result);
         });

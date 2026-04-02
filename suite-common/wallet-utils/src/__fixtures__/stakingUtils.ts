@@ -5,8 +5,8 @@ type GetUnstakingPeriodInDaysFixture = {
     description: string;
     args: {
         networkType?: NetworkType;
-        validatorWithdrawTime?: number;
-        validatorExitTime?: number;
+        withdrewAt?: number;
+        exitedAt?: number;
     };
     result: number;
 };
@@ -16,16 +16,15 @@ export const getUnstakingPeriodInDaysFixture: GetUnstakingPeriodInDaysFixture[] 
         description: 'should return correct unstaking period in days for ETH',
         args: {
             networkType: 'ethereum',
-            validatorWithdrawTime: 604800,
-            validatorExitTime: 259200,
+            withdrewAt: 604800,
+            exitedAt: 259200,
         },
         result: 10,
     },
     {
-        description:
-            'should return default unstaking period when validatorWithdrawTime is not valid for ETH',
+        description: 'should return default unstaking period when withdrewAt is not valid for ETH',
         args: {
-            validatorWithdrawTime: undefined,
+            withdrewAt: undefined,
         },
         result: UNSTAKING_ETH_PERIOD,
     },
@@ -37,11 +36,11 @@ export const getUnstakingPeriodInDaysFixture: GetUnstakingPeriodInDaysFixture[] 
         result: SOLANA_EPOCH_DAYS,
     },
     {
-        description: 'should return default ETH period when validatorExitTime is missing',
+        description: 'should return default ETH period when exitedAt is missing',
         args: {
             networkType: 'ethereum',
-            validatorWithdrawTime: 604800,
-            validatorExitTime: undefined,
+            withdrewAt: 604800,
+            exitedAt: undefined,
         },
         result: UNSTAKING_ETH_PERIOD,
     },
@@ -49,8 +48,8 @@ export const getUnstakingPeriodInDaysFixture: GetUnstakingPeriodInDaysFixture[] 
         description: 'should return default ETH period when both times are undefined',
         args: {
             networkType: 'ethereum',
-            validatorWithdrawTime: undefined,
-            validatorExitTime: undefined,
+            withdrewAt: undefined,
+            exitedAt: undefined,
         },
         result: UNSTAKING_ETH_PERIOD,
     },
@@ -63,8 +62,8 @@ export const getUnstakingPeriodInDaysFixture: GetUnstakingPeriodInDaysFixture[] 
         description:
             'should calculate unstaking period when network is undefined but times are valid',
         args: {
-            validatorWithdrawTime: 172800,
-            validatorExitTime: 86400,
+            withdrewAt: 172800,
+            exitedAt: 86400,
         },
         result: 3,
     },
@@ -72,8 +71,8 @@ export const getUnstakingPeriodInDaysFixture: GetUnstakingPeriodInDaysFixture[] 
         description: 'should return 0 when both times are 0',
         args: {
             networkType: 'ethereum',
-            validatorWithdrawTime: 0,
-            validatorExitTime: 0,
+            withdrewAt: 0,
+            exitedAt: 0,
         },
         result: 0,
     },
