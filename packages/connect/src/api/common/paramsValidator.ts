@@ -1,6 +1,5 @@
 // origin: https://github.com/trezor/connect/blob/develop/src/js/core/methods/helpers/paramsValidator.js
 import { ERRORS } from '@trezor/connect-common/src/constants';
-import type { DeviceModelInternal } from '@trezor/device-utils';
 import { typedObjectKeys, versionUtils } from '@trezor/utils';
 
 import { config } from '../../data/config';
@@ -163,8 +162,7 @@ export const getFirmwareRange = (
                 return (typeof rule.coin === 'string' ? [rule.coin] : rule.coin).includes(shortcut);
             }
 
-            // rule for method
-            return rule.methods || rule.capabilities;
+            return true;
         });
 
     configRules.forEach(rule => {
@@ -173,13 +171,10 @@ export const getFirmwareRange = (
         // 0 may be confusing. means: no-support for "min" and unlimited support for "max"
         if (rule.min) {
             models.forEach(model => {
-                const modelMin = (rule.min as Record<DeviceModelInternal, string | undefined>)[
-                    model
-                ];
-                if (modelMin) {
+                const modelMin = rule.min?.[model];
+                if (modelMin && range[model].min !== '0') {
                     if (
                         modelMin === '0' ||
-                        range[model].min === '0' ||
                         !versionUtils.isNewerOrEqual(range[model].min, modelMin)
                     ) {
                         range[model].min = modelMin as FirmwareBoundary;
@@ -189,13 +184,12 @@ export const getFirmwareRange = (
         }
         if (rule.max) {
             models.forEach(model => {
-                // @ts-expect-error same issue as in coinType above, config needs to be typed not inferred.
-                const modelMax = rule.max[model];
+                const modelMax = rule.max?.[model];
                 if (modelMax) {
                     if (
                         modelMax === '0' ||
                         range[model].max === '0' ||
-                        !versionUtils.isNewerOrEqual(range[model].max, modelMax)
+                        versionUtils.isNewerOrEqual(range[model].max, modelMax)
                     ) {
                         range[model].max = modelMax;
                     }
