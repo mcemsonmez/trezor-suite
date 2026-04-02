@@ -272,6 +272,7 @@ export enum TradingStackRoutes {
     TradingSellPreview = 'TradingSellPreview',
     TradingSellOutputsReview = 'TradingSellOutputsReview',
     TradingExchangeOutputsReview = 'TradingExchangeOutputsReview',
+    TradingConfirming = 'TradingConfirming',
 }
 
 export enum TransactionDetailStackRoutes {
