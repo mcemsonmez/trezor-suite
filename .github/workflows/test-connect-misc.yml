@@ -69,7 +69,7 @@ jobs:
 
       - name: Check exports
         # Fow now only testing @trezor/connect-web
-        run: npx --yes @arethetypeswrong/cli --pack ./tmp/packed-packages/trezor-connect-web.tgz 
+        run: npx --yes @arethetypeswrong/cli --pack ./tmp/packed-packages/trezor-connect-web.tgz
 
       - name: Test local install
         run: ./packages/connect/e2e/test-connect-local.sh
@@ -89,4 +89,3 @@ jobs:
 
       - run: yarn install --immutable
       - run: yarn workspace @trezor/protobuf update:protobuf
-      - run: yarn workspace @trezor/protobuf update:schema
