@@ -1,7 +1,6 @@
-import type { DeviceModelInternal } from '@trezor/device-utils';
-import { typedObjectKeys } from '@trezor/utils';
+import { typedObjectEntries, typedObjectKeys } from '@trezor/utils';
 
-import type { FirmwareRange } from '../../../types';
+import type { CoinInfo, FirmwareRange } from '../../../types';
 
 export const validateParams = [
     {
@@ -173,7 +172,7 @@ export const validateParams = [
     },
 ];
 
-const DEFAULT_RANGE: FirmwareRange = {
+const DEFAULT_RANGE = {
     UNKNOWN: { min: '1.0.0', max: '0' },
     T1B1: { min: '1.0.0', max: '0' },
     T2T1: { min: '2.0.0', max: '0' },
@@ -181,13 +180,9 @@ const DEFAULT_RANGE: FirmwareRange = {
     T3B1: { min: '2.0.0', max: '0' },
     T3T1: { min: '2.0.0', max: '0' },
     T3W1: { min: '2.0.0', max: '0' },
-};
+} satisfies FirmwareRange;
 
-const DEFAULT_COIN_INFO: {
-    support: Record<DeviceModelInternal, string>;
-    shortcut: string;
-    type: string;
-} = {
+const DEFAULT_COIN_INFO = {
     support: {
         UNKNOWN: '1.0.0',
         T1B1: '1.6.2',
@@ -199,7 +194,7 @@ const DEFAULT_COIN_INFO: {
     },
     shortcut: 'btc',
     type: 'bitcoin',
-};
+} as const satisfies Partial<CoinInfo>;
 
 const EMPTY_CONFIG = {
     supportedFirmware: [],
@@ -216,7 +211,7 @@ export const getFirmwareRange = [
         description: 'range from coinInfo',
         config: EMPTY_CONFIG,
         params: ['signTransaction', DEFAULT_COIN_INFO, DEFAULT_RANGE],
-        result: typedObjectKeys(DEFAULT_RANGE).reduce((acc, model: DeviceModelInternal) => {
+        result: typedObjectKeys(DEFAULT_RANGE).reduce((acc, model) => {
             acc[model] = {
                 min: DEFAULT_COIN_INFO.support[model],
                 max: '0',
@@ -250,9 +245,7 @@ export const getFirmwareRange = [
             },
             DEFAULT_RANGE,
         ],
-        result: (
-            Object.entries(DEFAULT_COIN_INFO.support) as [DeviceModelInternal, string][]
-        ).reduce((acc, [model, min]) => {
+        result: typedObjectEntries(DEFAULT_COIN_INFO.support).reduce((acc, [model, min]) => {
             acc[model] = { min: model === 'T1B1' ? '0' : min, max: '0' };
 
             return acc;
@@ -278,9 +271,7 @@ export const getFirmwareRange = [
             },
             DEFAULT_RANGE,
         ],
-        result: (
-            Object.entries(DEFAULT_COIN_INFO.support) as [DeviceModelInternal, string][]
-        ).reduce((acc, [model, min]) => {
+        result: typedObjectEntries(DEFAULT_COIN_INFO.support).reduce((acc, [model, min]) => {
             acc[model] = { min: model === 'T1B1' ? min : '0', max: '0' };
 
             return acc;

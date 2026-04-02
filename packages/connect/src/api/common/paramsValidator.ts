@@ -4,7 +4,7 @@ import type { DeviceModelInternal } from '@trezor/device-utils';
 import { typedObjectKeys, versionUtils } from '@trezor/utils';
 
 import { config } from '../../data/config';
-import type { CoinInfo, FirmwareRange } from '../../types';
+import type { CoinInfo, FirmwareBoundary, FirmwareRange } from '../../types';
 import { fromHardened } from '../../utils/pathUtils';
 
 type ParamType = 'string' | 'number' | 'array' | 'array-buffer' | 'boolean' | 'uint' | 'object';
@@ -127,7 +127,7 @@ export const getFirmwareRange = (
                 typeof supportVersion === 'string' &&
                 versionUtils.isNewer(supportVersion, range[model].min)
             ) {
-                range[model].min = supportVersion;
+                range[model].min = supportVersion as FirmwareBoundary;
             }
         });
     }
@@ -153,10 +153,8 @@ export const getFirmwareRange = (
         .filter(rule => {
             // REF_TODO: there is no coinType in config. possibly obsolete code?
             // probably still useful, we just need to define type for config and not infer it.
-            // @ts-expect-error
             if (rule.coinType) {
                 // rule for coin type
-                // @ts-expect-error
                 return rule.coinType === coinType;
             }
             if (rule.coin) {
@@ -184,7 +182,7 @@ export const getFirmwareRange = (
                         range[model].min === '0' ||
                         !versionUtils.isNewerOrEqual(range[model].min, modelMin)
                     ) {
-                        range[model].min = modelMin;
+                        range[model].min = modelMin as FirmwareBoundary;
                     }
                 }
             });
