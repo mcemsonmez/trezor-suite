@@ -7,10 +7,17 @@ import { type SuiteSyncFirmwareUpgradeNeededDeviceErrorType } from '@suite-commo
 import { type DeviceCancelledErrType, type DeviceErrorType } from '@suite-common/suite-types';
 import { type StaticSessionId } from '@trezor/connect';
 
+import { type SuiteSyncServerTypeSelectValue } from './relay/relayServerSettings';
+
 export type SuiteSyncErrorType =
     | DeviceErrorType
     | DeviceCancelledErrType
     | SuiteSyncFirmwareUpgradeNeededDeviceErrorType;
+
+export type SuiteSyncServer = {
+    type: SuiteSyncServerTypeSelectValue;
+    customUrl: string | null;
+};
 
 export type SuiteSyncSettings = {
     /**
@@ -26,13 +33,9 @@ export type SuiteSyncSettings = {
     isSuiteSyncEnabled: boolean;
 
     /**
-     * This is URL for backend/relay.
-     *
-     * Todo: This is kinda reladed to Evolu, and other libraries
-     *       can have different config. So this may better be in some
-     *       Provider-Config place in the future.
+     * This is server setting for Suite Sync backend/relay.
      */
-    suiteSyncRelayUrl: string | null;
+    suiteSyncServer: SuiteSyncServer;
 };
 
 export type SuiteSyncState = {
@@ -45,7 +48,7 @@ export const initialSuiteSyncState: SuiteSyncState = {
     settings: {
         isSuiteSyncEnabled: false,
         isSuiteSyncDebugEnabled: false,
-        suiteSyncRelayUrl: null,
+        suiteSyncServer: { type: 'default', customUrl: null },
     },
     suiteSyncErrors: {},
     suiteSyncOwners: {},
@@ -74,8 +77,8 @@ export const suiteSyncSlice = createSlice({
         ) => {
             state.settings.isSuiteSyncDebugEnabled = payload.isEnabled;
         },
-        setSuiteSyncRelayUrl: (state, { payload }: PayloadAction<{ url: string | null }>) => {
-            state.settings.suiteSyncRelayUrl = payload.url;
+        setSuiteSyncServerUrl: (state, { payload }: PayloadAction<SuiteSyncServer>) => {
+            state.settings.suiteSyncServer = payload;
         },
         setSuiteSyncError: (state, { payload }: SetSuiteSyncErrorAction) => {
             if (payload.error === null) {
@@ -107,7 +110,7 @@ export const suiteSyncSlice = createSlice({
 export const {
     updateSuiteSyncEnabled,
     updateSuiteSyncDebugEnabled,
-    setSuiteSyncRelayUrl,
+    setSuiteSyncServerUrl,
     setSuiteSyncError,
     setSuiteSyncOwner,
 } = suiteSyncSlice.actions;

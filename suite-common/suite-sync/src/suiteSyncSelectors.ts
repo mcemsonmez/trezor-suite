@@ -4,6 +4,7 @@ import { type SuiteSyncOwnerSerialized } from '@suite-common/suite-sync-storage'
 import { type StaticSessionId } from '@trezor/connect';
 import { isNotNull } from '@trezor/utils';
 
+import { type SuiteSyncServerTypeSelectValue } from './relay/relayServerSettings';
 import { DEFAULT_SUITE_SYNC_RELAY_URL } from './relay/relayUrl';
 import { type SuiteSyncState } from './suiteSyncSlice';
 import { type SuiteSyncInteraction } from './suiteSyncTypes';
@@ -21,12 +22,22 @@ export const selectIsSuiteSyncEnabled = (state: WithSuiteSyncAndDeviceState): bo
 export const selectIsSuiteSyncDebugEnabled = (state: WithSuiteSyncAndDeviceState): boolean =>
     state.suiteSync.settings.isSuiteSyncDebugEnabled;
 
+export const selectSuiteSyncServerType = (
+    state: WithSuiteSyncAndDeviceState,
+): SuiteSyncServerTypeSelectValue => state.suiteSync.settings.suiteSyncServer.type;
+
 export const selectSuiteSyncCustomRelayUrl = (
     state: WithSuiteSyncAndDeviceState,
 ): string | null => {
-    const { suiteSyncRelayUrl: storedUrl } = state.suiteSync.settings;
+    const { suiteSyncServer } = state.suiteSync.settings;
 
-    return isNotNull(storedUrl) && storedUrl.trim() !== '' ? storedUrl : null;
+    if (suiteSyncServer.type !== 'custom') {
+        return null;
+    }
+
+    return isNotNull(suiteSyncServer.customUrl) && suiteSyncServer.customUrl.trim() !== ''
+        ? suiteSyncServer.customUrl
+        : null;
 };
 
 export const selectSuiteSyncRelayUrl = (state: WithSuiteSyncAndDeviceState) =>

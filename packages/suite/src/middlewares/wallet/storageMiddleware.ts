@@ -19,7 +19,7 @@ import { firmwareActions } from '@suite-common/firmware';
 import { messageSystemActions } from '@suite-common/message-system';
 import {
     setSuiteSyncOwner,
-    setSuiteSyncRelayUrl,
+    setSuiteSyncServerUrl,
     updateSuiteSyncDebugEnabled,
     updateSuiteSyncEnabled,
 } from '@suite-common/suite-sync';
@@ -209,7 +209,7 @@ const storageMiddleware = (api: MiddlewareAPI<Dispatch, AppState>) => {
                 isAnyOf(
                     updateSuiteSyncDebugEnabled,
                     updateSuiteSyncEnabled,
-                    setSuiteSyncRelayUrl,
+                    setSuiteSyncServerUrl,
                 )(action)
             ) {
                 api.dispatch(storageActions.saveSuiteSyncSettings());

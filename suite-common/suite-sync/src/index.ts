@@ -2,6 +2,7 @@ export {
     selectIsSuiteSyncEnabled,
     selectSuiteSyncCustomRelayUrl,
     selectSuiteSyncRelayUrl,
+    selectSuiteSyncServerType,
     selectSuiteSyncInteraction,
     selectSuiteSyncOwnerForDeviceStaticId,
     selectIsSuiteSyncDebugEnabled,
@@ -17,7 +18,7 @@ export {
     initialSuiteSyncState,
     updateSuiteSyncDebugEnabled,
     updateSuiteSyncEnabled,
-    setSuiteSyncRelayUrl,
+    setSuiteSyncServerUrl,
     setSuiteSyncOwner,
 } from './suiteSyncSlice';
 export type { SuiteSyncState, SuiteSyncSettings } from './suiteSyncSlice';

@@ -38,7 +38,6 @@ import {
 } from './owner/createRetrieveSuiteSyncOwner';
 import { createSaveSuiteSyncOwner } from './owner/createSaveSuiteSyncOwner';
 import { createChangeRelayUrl } from './relay/createChangeRelayUrl';
-import { isUsingTrezorServer } from './relay/isUsingTrezorServer';
 import { createEnsureQuota } from './storage/createEnsureQuota';
 import { createEnsureStorage } from './storage/createEnsureStorage';
 import { createEnsureWalletSuiteSyncOn } from './storage/createEnsureWalletSuiteSyncOn';
@@ -50,6 +49,7 @@ import {
     selectIsSuiteSyncEnabled,
     selectSuiteSyncOwnerForDeviceStaticId,
     selectSuiteSyncRelayUrl,
+    selectSuiteSyncServerType,
 } from './suiteSyncSelectors';
 
 type CreateSuiteStorageFactory = (deps: {
@@ -110,8 +110,7 @@ export const createSuiteSyncCompositionRoot = (
         getDeviceForStaticSessionId,
         hasAllowance: ({ walletDescriptor, deviceId }) =>
             selectHasDeviceAllowance(deps.getState(), deviceId ?? null, walletDescriptor),
-        getIsDefaultRelayUrlSet: () =>
-            isUsingTrezorServer(selectSuiteSyncRelayUrl(deps.getState())),
+        getIsDefaultRelayUrlSet: () => selectSuiteSyncServerType(deps.getState()) === 'default',
         getEnforceQuotaManager: toGetter(deps.getState, selectEnforceQuotaManager),
     });
 
