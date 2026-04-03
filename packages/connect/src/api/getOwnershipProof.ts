@@ -1,7 +1,7 @@
 import type { MessagesSchema as PROTO } from '@trezor/protobuf';
 import { Assert } from '@trezor/schema-utils';
 
-import { bundlify, getFirmwareRange } from './common/paramsValidator';
+import { bundlify } from './common/paramsValidator';
 import type {
     MethodContext,
     MethodMessage,
@@ -47,10 +47,7 @@ export default class GetOwnershipProof extends AbstractMethod<
 
         super(message, params);
 
-        this.firmwareRange = preprocessed.reduce(
-            (prev, { coinInfo }) => getFirmwareRange(this.name, coinInfo, prev),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = preprocessed.map(({ coinInfo }) => coinInfo);
         this.preauthorized = payload.bundle.some(batch => batch.preauthorized);
         this.hasBundle = hasBundle;
     }

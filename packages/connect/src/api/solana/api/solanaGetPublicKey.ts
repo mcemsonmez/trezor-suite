@@ -14,7 +14,7 @@ import { getMiscNetwork } from '../../../data/coinInfo';
 import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle, GetPublicKey as GetPublicKeySchema } from '../../../types';
 import { fromHardened, getSerializedPath, validatePath } from '../../../utils/pathUtils';
-import { bundlify, getFirmwareRange } from '../../common/paramsValidator';
+import { bundlify } from '../../common/paramsValidator';
 
 export default class SolanaGetPublicKey extends AbstractMethod<
     'solanaGetPublicKey',
@@ -42,11 +42,7 @@ export default class SolanaGetPublicKey extends AbstractMethod<
         this.hasBundle = hasBundle;
         this.confirmMissingBackup = true;
         this.requiredDeviceCapabilities = ['Capability_Solana'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Solana'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Solana')];
     }
 
     get requiredPermissions(): MethodPermission[] {

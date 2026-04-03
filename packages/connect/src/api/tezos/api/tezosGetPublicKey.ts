@@ -14,7 +14,7 @@ import { getMiscNetwork } from '../../../data/coinInfo';
 import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle, GetPublicKey as GetPublicKeySchema } from '../../../types';
 import { fromHardened, getSerializedPath, validatePath } from '../../../utils/pathUtils';
-import { bundlify, getFirmwareRange } from '../../common/paramsValidator';
+import { bundlify } from '../../common/paramsValidator';
 
 export default class TezosGetPublicKey extends AbstractMethod<
     'tezosGetPublicKey',
@@ -42,11 +42,7 @@ export default class TezosGetPublicKey extends AbstractMethod<
 
         this.hasBundle = hasBundle;
         this.requiredDeviceCapabilities = ['Capability_Tezos'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Tezos'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Tezos')];
     }
 
     get requiredPermissions(): MethodPermission[] {

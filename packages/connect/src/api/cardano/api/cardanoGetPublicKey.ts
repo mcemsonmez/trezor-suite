@@ -15,7 +15,7 @@ import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle } from '../../../types';
 import { CardanoGetPublicKey as CardanoGetPublicKeySchema } from '../../../types/api/cardano';
 import { fromHardened, getSerializedPath, validatePath } from '../../../utils/pathUtils';
-import { bundlify, getFirmwareRange } from '../../common/paramsValidator';
+import { bundlify } from '../../common/paramsValidator';
 interface Params {
     proto: PROTO.CardanoGetPublicKey;
     suppressBackupWarning?: boolean;
@@ -51,11 +51,7 @@ export default class CardanoGetPublicKey extends AbstractMethod<'cardanoGetPubli
             batch => batch.suppressBackupWarning || !batch.proto.show_display,
         );
         this.requiredDeviceCapabilities = ['Capability_Cardano'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Cardano'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Cardano')];
     }
 
     get requiredPermissions(): MethodPermission[] {

@@ -16,7 +16,7 @@ import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle } from '../../../types';
 import { GetAddress as GetAddressSchema } from '../../../types/params';
 import { fromHardened, getSerializedPath, validatePath } from '../../../utils/pathUtils';
-import { bundlify, getFirmwareRange } from '../../common/paramsValidator';
+import { bundlify } from '../../common/paramsValidator';
 
 type Params = {
     proto: PROTO.RippleGetAddress;
@@ -51,11 +51,7 @@ export default class RippleGetAddress extends AbstractMethod<'rippleGetAddress',
         this.useUi = this.getUseUi(this.params, payload.useEventListener);
         this.confirmMissingBackup = true;
         this.requiredDeviceCapabilities = ['Capability_Ripple'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Ripple'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Ripple')];
     }
 
     get requiredPermissions(): MethodPermission[] {

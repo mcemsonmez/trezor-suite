@@ -9,7 +9,6 @@ import { getMiscNetwork } from '../../../data/coinInfo';
 import type { CardanoNativeScript } from '../../../types/api/cardano';
 import { CardanoGetNativeScriptHash as CardanoGetNativeScriptHashSchema } from '../../../types/api/cardano';
 import { validatePath } from '../../../utils/pathUtils';
-import { getFirmwareRange } from '../../common/paramsValidator';
 
 const validateScript = (script: CardanoNativeScript) => {
     if (script.keyPath) {
@@ -62,11 +61,7 @@ export default class CardanoGetNativeScriptHash extends AbstractMethod<
 
         super(message, params);
         this.requiredDeviceCapabilities = ['Capability_Cardano'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Cardano'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Cardano')];
     }
 
     get requiredPermissions(): MethodPermission[] {

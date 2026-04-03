@@ -14,7 +14,7 @@ import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle } from '../../../types';
 import { GetAddress as GetAddressSchema } from '../../../types/params';
 import { fromHardened, getSerializedPath, validatePath } from '../../../utils/pathUtils';
-import { bundlify, getFirmwareRange } from '../../common/paramsValidator';
+import { bundlify } from '../../common/paramsValidator';
 
 type Params = {
     proto: PROTO.SolanaGetAddress;
@@ -48,11 +48,7 @@ export default class SolanaGetAddress extends AbstractMethod<'solanaGetAddress',
         this.useUi = this.getUseUi(this.params, payload.useEventListener);
         this.confirmMissingBackup = true;
         this.requiredDeviceCapabilities = ['Capability_Solana'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Solana'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Solana')];
     }
 
     get requiredPermissions(): MethodPermission[] {

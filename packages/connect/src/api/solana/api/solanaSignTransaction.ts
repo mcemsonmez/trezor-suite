@@ -40,7 +40,6 @@ import {
     SolanaTxAdditionalInfo,
 } from '../../../types/api/solana';
 import { validatePath } from '../../../utils/pathUtils';
-import { getFirmwareRange } from '../../common/paramsValidator';
 import { getSolanaTokenDefinition } from '../solanaDefinitions';
 import { SOLANA_BASE_FEE, createTransactionShimFromHex } from '../solanaUtils';
 
@@ -89,11 +88,7 @@ export default class SolanaSignTransaction extends AbstractMethod<'solanaSignTra
         super(message, params);
 
         this.requiredDeviceCapabilities = ['Capability_Solana'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Solana'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Solana')];
     }
 
     get requiredPermissions(): MethodPermission[] {

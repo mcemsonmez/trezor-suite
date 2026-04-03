@@ -11,7 +11,6 @@ import { Assert } from '@trezor/schema-utils';
 import type { MethodMessage, MethodPermission } from '../core/AbstractMethod';
 import { AbstractMethod } from '../core/AbstractMethod';
 import { UI_REQUEST } from '../events';
-import { getFirmwareRange } from './common/paramsValidator';
 import { AuthenticateDeviceParams } from '../types/api/authenticateDevice';
 
 export default class AuthenticateDevice extends AbstractMethod<
@@ -34,7 +33,6 @@ export default class AuthenticateDevice extends AbstractMethod<
         this.allowDeviceMode = [UI_REQUEST.INITIALIZE, UI_REQUEST.SEEDLESS];
         this.skipFinalReload = false;
         this.useDeviceState = false;
-        this.firmwareRange = getFirmwareRange(this.name, null, this.firmwareRange);
     }
     get requiredPermissions(): MethodPermission[] {
         return ['management'];

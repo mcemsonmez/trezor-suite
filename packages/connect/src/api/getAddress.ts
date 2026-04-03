@@ -4,7 +4,7 @@ import { ERRORS } from '@trezor/connect-common/src/constants';
 import { Assert } from '@trezor/schema-utils';
 
 import type { PROTO } from '../constants';
-import { bundlify, getFirmwareRange, validateCoinPath } from './common/paramsValidator';
+import { bundlify, validateCoinPath } from './common/paramsValidator';
 import type {
     MethodContext,
     MethodMessage,
@@ -82,10 +82,7 @@ export default class GetAddress extends AbstractMethod<'getAddress', Params[]> {
 
         this.hasBundle = hasBundle;
         this.useUi = this.getUseUi(this.params, payload.useEventListener);
-        this.firmwareRange = params.reduce(
-            (prev, { coinInfo }) => getFirmwareRange(this.name, coinInfo, prev),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = params.map(({ coinInfo }) => coinInfo);
         this.confirmMissingBackup = true;
     }
 

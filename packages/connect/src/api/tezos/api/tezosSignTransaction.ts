@@ -8,7 +8,6 @@ import { AbstractMethod } from '../../../core/AbstractMethod';
 import { getMiscNetwork } from '../../../data/coinInfo';
 import { TezosSignTransaction as TezosSignTransactionSchema } from '../../../types/api/tezos';
 import { validatePath } from '../../../utils/pathUtils';
-import { getFirmwareRange } from '../../common/paramsValidator';
 import * as helper from '../tezosSignTx';
 
 export default class TezosSignTransaction extends AbstractMethod<
@@ -26,11 +25,7 @@ export default class TezosSignTransaction extends AbstractMethod<
 
         super(message, params);
         this.requiredDeviceCapabilities = ['Capability_Tezos'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Tezos'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Tezos')];
     }
 
     get requiredPermissions(): MethodPermission[] {

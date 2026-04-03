@@ -4,7 +4,6 @@ import type { MethodMessage, MethodPermission } from '../core/AbstractMethod';
 import { AbstractMethod } from '../core/AbstractMethod';
 import type { Device } from '../device/Device';
 import { DEVICE, UI_REQUEST } from '../events';
-import { getFirmwareRange } from './common/paramsValidator';
 
 export default class WipeDevice extends AbstractMethod<'wipeDevice'> {
     constructor(message: MethodMessage<'wipeDevice'>) {
@@ -13,7 +12,6 @@ export default class WipeDevice extends AbstractMethod<'wipeDevice'> {
         this.allowDeviceMode = [UI_REQUEST.INITIALIZE, UI_REQUEST.SEEDLESS, UI_REQUEST.BOOTLOADER];
         this.useDeviceState = false;
         this.skipFinalReload = false;
-        this.firmwareRange = getFirmwareRange(this.name, null, this.firmwareRange);
     }
     get requiredPermissions(): MethodPermission[] {
         return ['management'];

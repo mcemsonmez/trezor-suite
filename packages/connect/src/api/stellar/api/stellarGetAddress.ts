@@ -16,7 +16,7 @@ import { UI_REQUEST, createUiMessage } from '../../../events';
 import { Bundle } from '../../../types';
 import { GetAddress as GetAddressSchema } from '../../../types/params';
 import { fromHardened, getSerializedPath, validatePath } from '../../../utils/pathUtils';
-import { bundlify, getFirmwareRange } from '../../common/paramsValidator';
+import { bundlify } from '../../common/paramsValidator';
 
 type Params = {
     proto: PROTO.StellarGetAddress;
@@ -51,11 +51,7 @@ export default class StellarGetAddress extends AbstractMethod<'stellarGetAddress
         this.useUi = this.getUseUi(this.params, payload.useEventListener);
         this.confirmMissingBackup = true;
         this.requiredDeviceCapabilities = ['Capability_Stellar'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Stellar'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Stellar')];
     }
 
     get requiredPermissions(): MethodPermission[] {

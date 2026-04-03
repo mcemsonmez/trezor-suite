@@ -28,7 +28,7 @@ import {
 } from './bitcoin';
 import type { AccountUtxo, BitcoinNetworkInfo, DiscoveryAccount } from '../types';
 import { Discovery } from './common/Discovery';
-import { getFirmwareRange, validateParams } from './common/paramsValidator';
+import { validateParams } from './common/paramsValidator';
 import { fixCoinInfoNetwork, getBitcoinNetwork } from '../data/coinInfo';
 import type { RefTransaction } from '../types/api/bitcoin';
 import type {
@@ -120,8 +120,7 @@ export default class ComposeTransaction extends AbstractMethod<'composeTransacti
 
         this.useUi = this.useDevice;
 
-        // set required firmware from coinInfo support
-        this.firmwareRange = getFirmwareRange(this.name, coinInfo, this.firmwareRange);
+        this.requiredFirmwareCoins = [coinInfo];
     }
 
     discovery?: Discovery;

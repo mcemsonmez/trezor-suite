@@ -14,7 +14,7 @@ import { getBitcoinNetwork } from '../data/coinInfo';
 import { UI_REQUEST, createUiMessage } from '../events';
 import type { BitcoinNetworkInfo } from '../types';
 import { Bundle } from '../types';
-import { bundlify, getFirmwareRange, validateCoinPath } from './common/paramsValidator';
+import { bundlify, validateCoinPath } from './common/paramsValidator';
 import { GetPublicKey as GetPublicKeySchema } from '../types/api/getPublicKey';
 import { getPublicKeyLabel } from '../utils/accountUtils';
 import { validatePath } from '../utils/pathUtils';
@@ -69,10 +69,7 @@ export default class GetPublicKey extends AbstractMethod<'getPublicKey', Params[
 
         super(message, params);
 
-        this.firmwareRange = params.reduce(
-            (prev, { coinInfo }) => getFirmwareRange(this.name, coinInfo, prev),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = params.map(({ coinInfo }) => coinInfo);
         this.hasBundle = hasBundle;
         this.confirmMissingBackup = !this.params.every(
             batch => batch.suppressBackupWarning || !batch.proto.show_display,

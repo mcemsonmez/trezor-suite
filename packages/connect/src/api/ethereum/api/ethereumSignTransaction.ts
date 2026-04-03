@@ -13,7 +13,6 @@ import type { EthereumTransaction, EthereumTransactionEIP1559 } from '../../../t
 import { getNetworkLabel } from '../../../utils/ethereumUtils';
 import { deepTransform, stripHexPrefix } from '../../../utils/formatUtils';
 import { getSlip44ByPath, validatePath } from '../../../utils/pathUtils';
-import { getFirmwareRange } from '../../common/paramsValidator';
 import {
     decodeEthereumDefinition,
     ethereumNetworkInfoFromDefinition,
@@ -86,15 +85,13 @@ export default class EthereumSignTransaction extends AbstractMethod<
 
         super(message, params);
 
+        this.requiredFirmwareCoins = [network];
+        this.requiredDeviceCapabilities = ['Capability_Ethereum'];
         // get firmware range depending on used transaction type
         // eip1559 is possible since 2.4.2
-        this.firmwareRange = getFirmwareRange(
-            isEIP1559 ? 'eip1559' : this.name,
-            network,
-            this.firmwareRange,
-        );
-
-        this.requiredDeviceCapabilities = ['Capability_Ethereum'];
+        if (isEIP1559) {
+            this.requiredFirmwareCapabilities = ['eip1559'];
+        }
     }
 
     get requiredPermissions(): MethodPermission[] {

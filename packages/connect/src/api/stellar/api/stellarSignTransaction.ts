@@ -10,7 +10,6 @@ import { getMiscNetwork } from '../../../data/coinInfo';
 import type { StellarTransaction } from '../../../types/api/stellar';
 import { StellarSignTransaction as StellarSignTransactionSchema } from '../../../types/api/stellar';
 import { validatePath } from '../../../utils/pathUtils';
-import { getFirmwareRange } from '../../common/paramsValidator';
 import * as helper from '../stellarSignTx';
 
 type Params = {
@@ -47,11 +46,7 @@ export default class StellarSignTransaction extends AbstractMethod<
         super(message, params);
 
         this.requiredDeviceCapabilities = ['Capability_Stellar'];
-        this.firmwareRange = getFirmwareRange(
-            this.name,
-            getMiscNetwork('Stellar'),
-            this.firmwareRange,
-        );
+        this.requiredFirmwareCoins = [getMiscNetwork('Stellar')];
     }
 
     get requiredPermissions(): MethodPermission[] {
