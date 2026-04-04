@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import {
     AppName,
     type Evolu,
@@ -33,6 +35,7 @@ export const createQuery = createQueryBuilder(Schema);
 
 export class BaseEvoluClient {
     private _evolu?: Evolu<typeof Schema>;
+    private _ownerId?: string;
 
     async init({ ownerSecret, relayUrl = RELAY_URL }: EvoluClientInitParams) {
         const run = createNodeEvoluDeps();
@@ -40,6 +43,9 @@ export class BaseEvoluClient {
         if (!owner.ok) {
             throw new Error(`Failed to parse owner: ${JSON.stringify(owner.error)}`);
         }
+
+        this._ownerId = owner.value.id;
+        console.log('[EvoluClient] init ownerId:', this._ownerId);
 
         const sanitizedOwnerId = owner.value.id.replaceAll('_', '-');
         const appName = AppName.orThrow(`trezor-suite-e2e-${sanitizedOwnerId}`);
@@ -95,6 +101,15 @@ export class BaseEvoluClient {
         );
 
         return await this.evolu.loadQuery(query);
+    }
+
+    async dispose() {
+        if (this._evolu) {
+            await this._evolu[Symbol.asyncDispose]();
+            this._evolu = undefined;
+        }
+        console.log('[EvoluClient] dispose ownerId:', this._ownerId);
+        this._ownerId = undefined;
     }
 }
 
@@ -171,6 +186,31 @@ export const wipeAndRestartEvoluRelayServer = async () => {
         { cwd: REPO_ROOT },
     );
     await waitForRelayReady();
+};
+
+export const logToRelayDocker = (message: string) => {
+    try {
+        execFileSync(
+            'docker',
+            [
+                'compose',
+                '-f',
+                'docker/docker-compose.suite-ci-e2e.yml',
+                'exec',
+                '-T',
+                '-e',
+                `MARKER=${message}`,
+                'suite-sync',
+                'sh',
+                '-c',
+                'echo "[TEST] $MARKER" > /proc/1/fd/1',
+            ],
+            { cwd: REPO_ROOT },
+        );
+    } catch (e) {
+        // Non-fatal: marker logging should not break tests
+        console.warn('[logToRelayDocker] failed:', e);
+    }
 };
 
 export const seedQuotaManagerData = ({ ownerId }: { ownerId: string }) => {

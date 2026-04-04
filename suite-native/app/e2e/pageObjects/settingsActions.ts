@@ -21,7 +21,8 @@ type SettingsOptions =
     | 'trading'
     | 'wallet-connect'
     | 'connect-permissions'
-    | 'advanced';
+    | 'advanced'
+    | 'experimental';
 
 class SettingsActions {
     async openSection(option: SettingsOptions) {
@@ -107,8 +108,6 @@ class SettingsActions {
         const saveSuiteSyncUrl = element(by.id('@suiteSync/custom-relay-url-save-button'));
         await scrollUntilVisible(saveSuiteSyncUrl);
         await element(by.id('@suiteSync/custom-relay-url-input')).replaceText(url);
-        // Workaround: close keyboard by clicking on section header before tapping Save
-        await element(by.id('@suiteSync/header')).tap();
         await element(by.id('@suiteSync/custom-relay-url-save-button')).tap();
 
         const enforceQuotaManagerSwitcher = element(by.id('@suiteSyncQuotaManager/save-button'));
@@ -122,7 +121,7 @@ class SettingsActions {
 
         await onTabBar.tapBackButton();
 
-        await this.openSection('suite-sync');
+        await this.openSection('experimental');
         await wait(1000);
         await element(by.id('settings/suite-sync-touchable-row')).tap();
         await wait(1000);
