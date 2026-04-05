@@ -335,4 +335,73 @@ describe('Discovery Reducer', () => {
             passphraseSubmitted: undefined,
         });
     });
+
+    describe('PIN cancellation during passphrase flow (regression #15733)', () => {
+        it('should handle transition from enter-passphrase to cancelled when PIN is cancelled', () => {
+            // Simulates: user taps "Add hidden wallet" → discovery starts with isAddingHiddenWallet
+            // → device is locked → PIN requested → user cancels PIN → discovery set to cancelled
+            const store = initStore({
+                preloadedState: {
+                    wallet: {
+                        discovery: {
+                            [TEST_DEVICE_PATH]: {
+                                status: 'enter-passphrase',
+                                isAddingHiddenWallet: true,
+                                startTimestamp: 1000,
+                            },
+                        },
+                    },
+                },
+            });
+
+            // After fix: Failure_PinCancelled is recognized as cancellation code,
+            // so applyDeviceStateErrorThunk dispatches cancelled (not failed)
+            store.dispatch(
+                discoveryActions.updateDiscovery({ status: 'cancelled' }, TEST_DEVICE_PATH),
+            );
+
+            const discovery = store.getState().wallet.discovery[TEST_DEVICE_PATH];
+            expect(discovery.status).toBe('cancelled');
+            // isAddingHiddenWallet flag should be preserved for cleanup logic
+            expect(discovery.isAddingHiddenWallet).toBe(true);
+        });
+
+        it('should preserve isAddingHiddenWallet flag through status transitions', () => {
+            const store = initStore();
+            const timestamp = Date.now();
+            jest.spyOn(Date, 'now').mockImplementation(() => timestamp);
+
+            // Start discovery with hidden wallet flag
+            store.dispatch(
+                discoveryActions.startDiscovery(TEST_DEVICE_PATH, {
+                    isAddingHiddenWallet: true,
+                    isAddingExistingWallet: false,
+                }),
+            );
+
+            expect(store.getState().wallet.discovery[TEST_DEVICE_PATH].isAddingHiddenWallet).toBe(
+                true,
+            );
+
+            // Transition to enter-passphrase
+            store.dispatch(
+                discoveryActions.updateDiscovery({ status: 'enter-passphrase' }, TEST_DEVICE_PATH),
+            );
+
+            expect(store.getState().wallet.discovery[TEST_DEVICE_PATH].isAddingHiddenWallet).toBe(
+                true,
+            );
+
+            // Transition to cancelled (PIN cancel)
+            store.dispatch(
+                discoveryActions.updateDiscovery({ status: 'cancelled' }, TEST_DEVICE_PATH),
+            );
+
+            const final = store.getState().wallet.discovery[TEST_DEVICE_PATH];
+            expect(final.status).toBe('cancelled');
+            expect(final.isAddingHiddenWallet).toBe(true);
+
+            jest.restoreAllMocks();
+        });
+    });
 });

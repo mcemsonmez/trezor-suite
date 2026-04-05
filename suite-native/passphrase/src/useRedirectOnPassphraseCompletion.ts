@@ -14,6 +14,7 @@ import { useNavigateToInitialScreen } from '@suite-native/navigation';
 import { useAnalytics } from '@suite-native/services';
 
 import {
+    selectHasNewHiddenWalletFailed,
     selectHasPassphraseError,
     selectHasVerificationCancelledError,
     selectPassphraseDiscoveryCompleted,
@@ -25,6 +26,7 @@ export const useRedirectOnPassphraseCompletion = () => {
     const passphraseDiscoveryCompleted = useSelector(selectPassphraseDiscoveryCompleted);
     const hasPassphraseError = useSelector(selectHasPassphraseError);
     const hasVerificationCancelledError = useSelector(selectHasVerificationCancelledError);
+    const hasNewHiddenWalletFailed = useSelector(selectHasNewHiddenWalletFailed);
     const analytics = useAnalytics();
     const dispatch = useDispatch();
     const store = useStore();
@@ -76,6 +78,26 @@ export const useRedirectOnPassphraseCompletion = () => {
     }, [
         dispatch,
         hasVerificationCancelledError,
+        navigateToInitialScreen,
+        route.name,
+        device,
+        analytics,
+    ]);
+
+    useEffect(() => {
+        // New hidden wallet creation failed (e.g. PIN cancelled during passphrase open flow).
+        // Clean up and return to the previous wallet dashboard.
+        if (hasNewHiddenWalletFailed && device) {
+            analytics.report({
+                type: events.passphraseExitEvent.name,
+                payload: { screen: route.name },
+            });
+            dispatch(cancelDiscoveryThunk(device));
+            navigateToInitialScreen();
+        }
+    }, [
+        dispatch,
+        hasNewHiddenWalletFailed,
         navigateToInitialScreen,
         route.name,
         device,

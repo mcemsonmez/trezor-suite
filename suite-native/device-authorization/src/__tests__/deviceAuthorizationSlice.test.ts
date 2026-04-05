@@ -143,4 +143,33 @@ describe('deviceAuthorizationSlice', () => {
             });
         });
     });
+
+    describe('PIN cancel during passphrase open flow (regression #15733)', () => {
+        it('should transition PinRequested → Idle when CLOSE_UI_WINDOW fires after PIN cancel', () => {
+            // Step 1: Device is locked, PIN is requested during passphrase flow
+            let state = deviceAuthorizationReducer(undefined, {
+                type: UI_REQUEST.REQUEST_PIN,
+            });
+            expect(state.deviceAuthorizationStep).toBe(DeviceAuthorizationStep.PinRequested);
+
+            // Step 2: User cancels PIN → TrezorConnect.cancel('pin-cancelled') → CLOSE_UI_WINDOW
+            state = deviceAuthorizationReducer(state, {
+                type: UI_REQUEST.CLOSE_UI_WINDOW,
+            });
+            expect(state.deviceAuthorizationStep).toBe(DeviceAuthorizationStep.Idle);
+        });
+
+        it('should not get stuck in PinRequested after cancel', () => {
+            const prevState = getDeviceAuthorizationState({
+                deviceAuthorizationStep: DeviceAuthorizationStep.PinRequested,
+            });
+
+            // CLOSE_UI_WINDOW should always reset to Idle
+            const state = deviceAuthorizationReducer(prevState, {
+                type: UI_REQUEST.CLOSE_UI_WINDOW,
+            });
+
+            expect(state.deviceAuthorizationStep).toBe(DeviceAuthorizationStep.Idle);
+        });
+    });
 });

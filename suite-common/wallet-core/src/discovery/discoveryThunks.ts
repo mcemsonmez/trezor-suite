@@ -59,7 +59,11 @@ import { selectAccountsToBeForgotten, selectDiscoveryAccountsParam } from '../se
 import { selectIsDeviceAutoEjectEnabled } from '../settings/walletSettingsReducer';
 
 const USER_UI_CANCEL_CODE = 'USER_UI_CANCEL';
-const DEVICE_CANCELLATION_CODES = ['Method_Cancel', 'Failure_ActionCancelled'];
+const DEVICE_CANCELLATION_CODES = [
+    'Method_Cancel',
+    'Failure_ActionCancelled',
+    'Failure_PinCancelled',
+];
 
 type ProgressEvent = BundleProgress<DiscoverAccountsProgress>['payload'];
 

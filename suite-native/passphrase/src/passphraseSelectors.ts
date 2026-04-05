@@ -89,3 +89,17 @@ export const selectHasVerificationCancelledError = (
 
     return discovery?.status === 'cancelled';
 };
+
+/**
+ * Returns true if a new hidden wallet creation failed (e.g. PIN cancelled during passphrase flow).
+ * This is distinct from `selectHasPassphraseError` which only covers existing wallet reconnection.
+ */
+export const selectHasNewHiddenWalletFailed = (state: DiscoveryRootState & DeviceRootState) => {
+    const discovery = selectDiscoveryByDevicePath(state, state.device.selectedDevice?.path);
+
+    return (
+        discovery?.isAddingHiddenWallet &&
+        !discovery?.isAddingExistingWallet &&
+        ['failed', 'cancelled'].includes(discovery.status)
+    );
+};
